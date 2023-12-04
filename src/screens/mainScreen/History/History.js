@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Modal, Text, SafeAreaView, View, StatusBar, Alert, ScrollView, ActivityIndicator, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Modal, Text, SafeAreaView, View, StatusBar, Alert, ScrollView, ActivityIndicator, TouchableOpacity, Image, TouchableWithoutFeedback } from 'react-native'
 import { s } from "react-native-size-matters"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
@@ -27,41 +27,61 @@ const History = ({ navigation }) => {
     const [transaction, setTransaction] = useState([])
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
+    const [modalVisible2, setModalVisible2] = useState(false)
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('');
     const [show, setShow] = useState(false);
     const [startText, setStartText] = useState('')
     const [endText, setEndText] = useState('')
     const [itemValue, setItemValue] = useState()
+    const [selectValue, setSelectValue] = useState({ name: "" });
+    const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
 
 
+    const options = [
+        { id: 1, name: "Successful" },
+        { id: 2, name: "Failed" },
+        { id: 3, name: "Pending" },
+        { id: 4, name: "Transfer" },
+        { id: 5, name: "Withdrawal" },
+    ]
+
+    const close = () => {
+        setModalVisible2(false)
+    }
+
+    const setValue = (name) => {
+        setSelectValue({ name });
+    };
 
 
     const onChange = (selectedDate) => {
         setShow(false);
         if (!selectedDate) return; // Handle case when no date is selected
-      
+
         setDate(selectedDate);
-      
+
         if (mode === 'startdate') {
-          setStartText(formatDate(selectedDate));
+            setStartText(formatDate(selectedDate));
         } else {
-          setEndText(formatDate(selectedDate));
+            setEndText(formatDate(selectedDate));
         }
         setMode('');
-      };
+        setIsCheckboxChecked(false);
+    };
 
 
     const showMode = (currentMode) => {
         setMode(currentMode);
         setShow(true);
+        setIsCheckboxChecked(false)
     };
 
     const formatDate = (date) => {
         if (!date) return '';
         return moment(date).format('MMM DD, YYYY');
-        
-      };
+
+    };
 
 
     const formatter = () => {
@@ -88,6 +108,15 @@ const History = ({ navigation }) => {
         });
 
         setFilterOptions(updatedOptions);
+
+        const isSelected = updatedOptions[index].isChecked;
+        setIsCheckboxChecked(!isSelected);
+
+        if (index === 0 || index === 1) {
+            setStartText('');
+            setEndText('');
+        }
+
     };
 
     const { auth: { user } } = useSelector(state => state)
@@ -95,15 +124,13 @@ const History = ({ navigation }) => {
     const today = moment().format('YYYY-MM-DD');
     let startDate;
     if (itemValue) {
-      startDate = moment().subtract(itemValue, 'days').format('YYYY-MM-DD');
+        startDate = moment().subtract(itemValue, 'days').format('YYYY-MM-DD');
     } else {
-      startDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
+        startDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
     }
     const endDate = today
 
-    const transactionHistory = async () => {
-
-       
+    const transactionHistory = async (name) => {
 
         const url = `${credentials.URL2}/user/transaction-history`
         const options = { headers: { Authorization: `Bearer ${user.token}` } }
@@ -111,13 +138,14 @@ const History = ({ navigation }) => {
             "page": 1,
             "startDate": startText ? startText : startDate,
             "endDate": endText ? endText : endDate,
-            "status": "",
+            "status": name === "Successful" ? "successful" : name === "Failed" ? "failed" : name === "Pending" ? "pending" : "",
             "reference": "",
-            "product": "",
+            "product": name === "Transfer" ? "transfer" : name === "Withdrawal" ? "withdrawal" : "",
             "account": "",
             "channel": "",
             "provider": ""
         }
+
 
         try {
             setLoading(true)
@@ -159,10 +187,10 @@ const History = ({ navigation }) => {
                             <Ionicons name="calendar" size={s(18)} color="#0B44BD" />
                             <Text style={{ marginLeft: s(4), fontWeight: "500", color: "black" }}>Filter By Date</Text>
                         </TouchableOpacity>
-                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <TouchableOpacity onPress={() => setModalVisible2(true)} style={{ flexDirection: "row", alignItems: "center" }}>
                             <Text style={{ marginLeft: s(4), fontWeight: "500", color: "#3C6BFA" }}>All Transactions</Text>
                             <Ionicons name="chevron-down-sharp" size={s(18)} color="#3C6BFA" />
-                        </View>
+                        </TouchableOpacity>
                     </View>
 
                     <Modal
@@ -228,34 +256,69 @@ const History = ({ navigation }) => {
                                         )
                                     })}
 
-                                    <AppButton title="Apply Filter" style={{ marginTop: s(15), borderRadius: s(10) }} onPress={() => {transactionHistory(), setModalVisible(false)}} />
+                                    <AppButton title="Apply Filter" style={{ marginTop: s(15), borderRadius: s(10) }} onPress={() => { transactionHistory(), setModalVisible(false) }} />
                                 </ScrollView>
 
                             </View>
                         </View>
                     </Modal>
+
+                    <Modal
+                        visible={modalVisible2}
+                        animationType='slide'
+                        transparent={true}
+                    >
+
+
+                        <View style={styles.modalScreen}>
+                            <View style={styles.transparentContainer}></View>
+                            <View style={styles.contentContainer}>
+
+                                <View style={{ flexDirection: 'row-reverse', alignItems: 'center', padding: s(5), justifyContent: "space-between", marginBottom: s(10) }}>
+                                    <TouchableWithoutFeedback onPress={close}>
+                                        <MaterialCommunityIcons name="close-circle" size={s(22)} color="black" />
+                                    </TouchableWithoutFeedback>
+                                    <Text style={{ color: "black", fontSize: s(13) }}>Filter By Transaction Category</Text>
+                                    <Text></Text>
+                                </View>
+                                <ScrollView>
+                                    {options.map((item, key) => {
+                                        return (
+                                            <View>
+                                                <TouchableOpacity style={styles.networkContainer} onPress={() => { close(), transactionHistory(item.name) }}>
+                                                    <Text style={{ marginLeft: s(10), color: "black", fontWeight: "400", fontSize: s(14), }}>{item.name}</Text>
+                                                </TouchableOpacity>
+                                                <View style={{ width: "90%", height: 1, backgroundColor: "lightgrey", marginLeft: s(10), }}></View>
+                                            </View>
+                                        )
+                                    })}
+                                </ScrollView>
+                            </View>
+                        </View>
+
+                    </Modal>
                     <ScrollView>
                         {loading === true && <ActivityIndicator color="black" style={{ width: s(40), height: s(40), marginLeft: "50%" }} />}
-                        {transaction.length === 0 ? <NoHistory style={{ marginTop: s(20) }}/> : null}
+                        {transaction.length === 0 ? <NoHistory style={{ marginTop: s(20) }} /> : null}
                         {transaction.map((item, key) => {
                             return (
                                 <React.Fragment key={key}>
                                     <TouchableOpacity onPress={() => navigation.navigate("HistoryReceipt", { item })} style={{ flexDirection: "row", justifyContent: "space-between", marginTop: s(18), alignItems: "center" }}>
                                         <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                            { item.status === "successful" ? <MaterialCommunityIcons name="arrow-top-right-thick" size={s(18)} color="green"/> : item.status === "pending" ?  <MaterialCommunityIcons name="arrow-top-right-thick" size={s(18)} color="yellow"/> :
-                                            <MaterialCommunityIcons name="arrow-bottom-left-thick" size={s(18)} color="red" />}
+                                            {item.status === "successful" ? <MaterialCommunityIcons name="arrow-top-right-thick" size={s(18)} color="green" /> : item.status === "pending" ? <MaterialCommunityIcons name="arrow-top-right-thick" size={s(18)} color="#8B8000" /> :
+                                                <MaterialCommunityIcons name="arrow-bottom-left-thick" size={s(18)} color="red" />}
                                             <View style={{ width: s(30), height: s(30), justifyContent: "center", alignItems: "center", backgroundColor: "#ffffff", borderRadius: s(40), marginLeft: s(5), marginRight: s(5) }}>
-                                                { item.product === "withdrawal" ? <MaterialCommunityIcons name="credit-card-minus" size={s(18)} color="#896cfa" /> : item.product === "transfer" ? <Ionicons name="paper-plane" size={s(18)} color="#896cfa" /> : null }
-                                                { item.product === "mtnvtu" ? <Image source={mtn} style={{ width: s(30), height: s(30) }} /> : item.product === "glovtu" ? <Image source={glo} style={{ width: s(30), height: s(30) }} />  : 
-                                                item.product === "airtelvtu" ? <Image source={airtel} style={{ width: s(30), height: s(30) }} /> : item.product === "9mobilevtu" ? <Image source={nineMobile} style={{ width: s(30), height: s(30) }} />
-                                                : null }
-                                                { item.product === "mtndata" ? <Image source={mtn} style={{ width: s(30), height: s(30) }} /> : item.product === "glodata" ? <Image source={glo} style={{ width: s(30), height: s(30) }} />  : 
-                                                item.product === "airteldata" ? <Image source={airtel} style={{ width: s(30), height: s(30) }} /> : item.product === "9mobiledata" ? <Image source={nineMobile} style={{ width: s(30), height: s(30) }} />
-                                                : null }
-                                                { item.product === "ekedc" ? <Image source={ekedc} style={{ width: s(30), height: s(30) }} /> : item.product === "ikedc" ? <Image source={ikedc} style={{ width: s(30), height: s(30) }} />  : 
-                                                item.product === "ibedc" ? <Image source={ibedc} style={{ width: s(30), height: s(30) }} /> : item.product === "eedc" ? <Image source={eedc} style={{ width: s(30), height: s(30) }} /> : item.product === "phedc" ? <Image source={phdc} style={{ width: s(30), height: s(30) }} /> : item.product === "aedc" ? <Image source={abdc} style={{ width: s(30), height: s(30) }} />  : 
-                                                item.product === "jedc" ? <MaterialCommunityIcons name="lightbulb-outline" size={s(18)} color="#896cfa" /> : item.product === "kedco" ? <MaterialCommunityIcons name="lightbulb-outline" size={s(18)} color="#896cfa" /> : item.product === "kadec" ? <MaterialCommunityIcons name="lightbulb-outline" size={s(18)} color="#896cfa" /> 
-                                                : null }
+                                                {item.product === "withdrawal" ? <MaterialCommunityIcons name="credit-card-minus" size={s(18)} color="#896cfa" /> : item.product === "transfer" ? <Ionicons name="paper-plane" size={s(18)} color="#896cfa" /> : null}
+                                                {item.product === "mtnvtu" ? <Image source={mtn} style={{ width: s(30), height: s(30) }} /> : item.product === "glovtu" ? <Image source={glo} style={{ width: s(30), height: s(30) }} /> :
+                                                    item.product === "airtelvtu" ? <Image source={airtel} style={{ width: s(30), height: s(30) }} /> : item.product === "9mobilevtu" ? <Image source={nineMobile} style={{ width: s(30), height: s(30) }} />
+                                                        : null}
+                                                {item.product === "mtndata" ? <Image source={mtn} style={{ width: s(30), height: s(30) }} /> : item.product === "glodata" ? <Image source={glo} style={{ width: s(30), height: s(30) }} /> :
+                                                    item.product === "airteldata" ? <Image source={airtel} style={{ width: s(30), height: s(30) }} /> : item.product === "9mobiledata" ? <Image source={nineMobile} style={{ width: s(30), height: s(30) }} />
+                                                        : null}
+                                                {item.product === "ekedc" ? <Image source={ekedc} style={{ width: s(30), height: s(30) }} /> : item.product === "ikedc" ? <Image source={ikedc} style={{ width: s(30), height: s(30) }} /> :
+                                                    item.product === "ibedc" ? <Image source={ibedc} style={{ width: s(30), height: s(30) }} /> : item.product === "eedc" ? <Image source={eedc} style={{ width: s(30), height: s(30) }} /> : item.product === "phedc" ? <Image source={phdc} style={{ width: s(30), height: s(30) }} /> : item.product === "aedc" ? <Image source={abdc} style={{ width: s(30), height: s(30) }} /> :
+                                                        item.product === "jedc" ? <MaterialCommunityIcons name="lightbulb-outline" size={s(18)} color="#896cfa" /> : item.product === "kedco" ? <MaterialCommunityIcons name="lightbulb-outline" size={s(18)} color="#896cfa" /> : item.product === "kadec" ? <MaterialCommunityIcons name="lightbulb-outline" size={s(18)} color="#896cfa" />
+                                                            : null}
                                             </View>
                                             <View style={{ marginLeft: s(5) }}>
                                                 <Text style={{ fontSize: s(10), fontWeight: "500", color: "grey" }}>{item.product.charAt(0).toUpperCase() + item.product.slice(1)}</Text>
@@ -264,7 +327,7 @@ const History = ({ navigation }) => {
                                         </View>
                                         <View style={{ alignItems: "flex-end" }}>
                                             <Text style={{ fontSize: s(14), fontWeight: "600", color: "#484747", marginBottom: s(5) }}>{`₦${format.format(item.amount)}`}</Text>
-                                            { item.status === "successful" ? <Text style={{ color: "green" }} >{ item.status }</Text> : item.status === "pending" ? <Text style={{ color: "yellow" }} >{ item.status }</Text> : <Text style={{ color: "red" }} >{ item.status }</Text> }
+                                            {item.status === "successful" ? <Text style={{ color: "green" }} >{item.status}</Text> : item.status === "pending" ? <Text style={{ color: "#8B8000" }} >{item.status}</Text> : <Text style={{ color: "red" }} >{item.status}</Text>}
                                             <Text style={{ marginTop: s(2) }}>{formatDate(item.createdAt)}</Text>
                                         </View>
                                     </TouchableOpacity>
@@ -314,7 +377,11 @@ const styles = StyleSheet.create({
     checkbox: {
         width: s(18),
         height: s(18),
-    }
+    },
+    networkContainer: {
+        paddingTop: s(25),
+        paddingBottom: s(10)
+    },
 })
 
 export default History

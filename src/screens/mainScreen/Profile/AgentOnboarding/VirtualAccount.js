@@ -23,6 +23,8 @@ import moment from 'moment'
 import Clipboard from '@react-native-clipboard/clipboard'
 import Share from "react-native-share"
 
+import Unlock from '../Consent&Release'
+
 
 
 
@@ -367,6 +369,8 @@ const VirtualAccount = ({ navigation, route }) => {
                         </View>
                     </View>
                 </View> : null}
+
+                <Unlock />
 
             </View>
         </>

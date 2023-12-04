@@ -1,5 +1,6 @@
 import React from "react";
-import { Success } from "../constants/animation"; 
+import { Success, Network,  } from "../constants/animation"; 
+import { View } from "react-native";
 import Lottie from "lottie-react-native"
 
 const LottieView = () => {
@@ -8,4 +9,12 @@ const LottieView = () => {
     )
 }
 
-export default LottieView
+const LottieNetwork = ({ style }) => {
+    return (
+        <View style={[style]}>
+            <Lottie source={Network} autoPlay loop />
+        </View>
+    )
+}
+
+export { LottieView, LottieNetwork }

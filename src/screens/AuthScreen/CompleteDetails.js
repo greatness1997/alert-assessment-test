@@ -92,7 +92,8 @@ const CompleteDetails = ({ navigation, route }) => {
         const body = {
             "bvn": res.bvn,
             "dateOfBirth": startText,
-            "gender": genderText
+            "gender": genderText,
+            "address":res.address
         }
 
         console.log(body)
@@ -134,15 +135,15 @@ const CompleteDetails = ({ navigation, route }) => {
 
             <View style={styles.container}>
                 {isToastVisible && <ToastNotification message={message} />}
-                {!isToastVisible && <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: s(40) }}>
+                {!isToastVisible && <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: s(20) }}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <TouchableOpacity onPress={() => navigation.goBack()} >
                             <MaterialCommunityIcons name="arrow-left" size={s(25)} color="white" />
                         </TouchableOpacity>
                         <Text style={{ marginLeft: s(5), fontWeight: "bold", fontSize: s(14), color: "white" }}>Tell Us About Yourself</Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigation.navigate("Document")}>
-                        <Text style={{ fontSize: s(14), fontWeight: "bold", color: "#a9c2f8" }}>Skip</Text>
+                    <TouchableOpacity>
+                        {/* <Text style={{ fontSize: s(14), fontWeight: "bold", color: "#a9c2f8" }}>Skip</Text> */}
                     </TouchableOpacity>
                 </View>}
 
@@ -151,13 +152,13 @@ const CompleteDetails = ({ navigation, route }) => {
                     <Text style={{ color: "white", fontSize: s(10) }}>step 3 of 4</Text>
                 </View>}
 
-                <View>
-                    <Text style={{ color: "#b1b1b1cc", padding: 4, marginLeft: "1.5%", marginTop: 10 }}>You can skip this step, however you won't be able to use the app to it's best </Text>
-                </View>
+                {/* <View>
+                    <Text style={{ color: "#b1b1b1cc", padding: 4, marginLeft: "1.5%", marginTop: 0 }}>You can skip this step, however you won't be able to use the app to it's best </Text>
+                </View> */}
 
                 <KeyboardAvoidView>
                     <Formik
-                        initialValues={{ bvn: "" }}
+                        initialValues={{ bvn: "", address: "" }}
                         enableReinitialize={true}
                         onSubmit={(values) => {
                             Schema.validate(values)
@@ -175,19 +176,19 @@ const CompleteDetails = ({ navigation, route }) => {
 
                             return (
                                 <View style={{ marginTop: s(30) }}>
-                                    <Text style={{ color: "white", marginBottom: s(10), fontSize: s(12), marginLeft: s(5) }}>Bank Verification Number (BVN)</Text>
+                                   
+                                    <Text style={{ color: "white", marginBottom: s(10), fontSize: s(12), marginLeft: s(5) }}>Address</Text>
                                     <View style={styles.loginContainer2}>
                                         {/* <Text style={{ color: "white", fontWeight: "bold", fontSize: s(15), marginLeft: s(5) }}>+234</Text> */}
                                         <TextInput
                                             style={styles.input}
-                                            placeholder='11 Digit Number'
+                                            placeholder='Enter You Home Address'
                                             placeholderTextColor="#414a5e"
-                                            keyboardType='numeric'
                                             onChangeText={(text) => {
-                                                handleChange("bvn")(text);
+                                                handleChange("address")(text);
                                                 setError(null);
                                             }}
-                                            value={values.bvn}
+                                            value={values.address}
                                         />
                                     </View>
 
@@ -220,7 +221,7 @@ const CompleteDetails = ({ navigation, route }) => {
 
                                     </View> */}
 
-                                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
+                                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 0 }}>
                                         <View style={styles.formContainer4}>
                                             <TouchableOpacity onPress={() => showMode("date")} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                                                 <Text style={{ color: "white", fontSize: s(10), marginBottom: s(7), marginLeft: s(6) }}>Date of Birth</Text>
@@ -237,6 +238,24 @@ const CompleteDetails = ({ navigation, route }) => {
                                             <Text style={{ color: "white", fontWeight: "500", fontSize: s(13), marginLeft: s(6) }}>{genderText}</Text>
                                         </View>
                                     </View>
+
+                                    <Text style={{ color: "white", marginTop: s(20), marginBottom: s(5), fontSize: s(12), marginLeft: s(5) }}>Bank Verification Number (BVN)</Text>
+                                    <View style={styles.loginContainer3}>
+                                        {/* <Text style={{ color: "white", fontWeight: "bold", fontSize: s(15), marginLeft: s(5) }}>+234</Text> */}
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder='11 Digit Number'
+                                            placeholderTextColor="#414a5e"
+                                            keyboardType='numeric'
+                                            onChangeText={(text) => {
+                                                handleChange("bvn")(text);
+                                                setError(null);
+                                            }}
+                                            value={values.bvn}
+                                        />
+                                    </View>
+
+                                   <Text style={{ marginLeft: 5, marginTop: 10, color: "#c66e54", fontSize: 12 }}>BVN is not required </Text>
 
                                     {error && <Text style={{ fontSize: s(12), marginTop: s(10), color: "red", marginLeft: s(8) }}>{error}</Text>}
                                     {/* <AppButton title="Sign Up" onPress={handleSubmit} isSubmitting={loading} style={styles.btn} /> */}
@@ -269,16 +288,16 @@ const CompleteDetails = ({ navigation, route }) => {
                         <SafeAreaView style={styles.contentContainer}>
                             <View style={styles.closeIconContainer}>
                                 <TouchableWithoutFeedback onPress={close}>
-                                    <MaterialCommunityIcons name="close-circle" size={s(22)} />
+                                    <MaterialCommunityIcons name="close-circle" size={s(22)} color="black" />
                                 </TouchableWithoutFeedback>
-                                <Text style={{ fontSize: s(15), fontWeight: "600" }}>Gender Options</Text>
+                                <Text style={{ fontSize: s(15), fontWeight: "600", color: "black" }}>Gender Options</Text>
                                 <Text></Text>
                             </View>
                             <View style={{ padding: 0, marginTop: 0, width: "100%" }}>
                                 <View style={{ padding: s(10), marginBottom: s(0), }}>
                                     {gender.map((item, key) => (
                                         <TouchableOpacity key={key} onPress={() => { setGender(item.name), setModalVisible(false) }}>
-                                            <Text style={{ fontSize: s(14), marginBottom: s(15), marginLeft: s(10) }}>{item.label}</Text>
+                                            <Text style={{ fontSize: s(14), marginBottom: s(15), marginLeft: s(10), color: "black" }}>{item.label}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </View>
@@ -337,6 +356,19 @@ const styles = StyleSheet.create({
         width: '100%',
         height: s(55),
         marginBottom: s(15),
+    },
+    loginContainer3: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: s(2.5),
+        borderRadius: s(50),
+        padding: ms(10),
+        borderColor: "#414a5e",
+        backgroundColor: "#000c27",
+        width: '100%',
+        height: s(55),
+        marginTop: s(10),
     },
     input: {
         flex: 1,

@@ -123,6 +123,7 @@ const WalletHistoryList = ({ navigation }) => {
             setLoading(true)
             const response = await axios.post(url, body, options)
             const { walletHistory } = response.data
+            console.log(walletHistory)
             setWalletList(walletHistory.docs)
             setLoading(false)
 

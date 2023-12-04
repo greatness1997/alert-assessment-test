@@ -1800,10 +1800,10 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.11.tgz"
   "version" "0.1.11"
 
-"@react-native-community/netinfo@^9.4.1":
-  "integrity" "sha512-dAbY5mfw+6Kas/GJ6QX9AZyY+K+eq9ad4Su6utoph/nxyH3whp5cMSgRNgE2VhGQVRZ/OG0qq3IaD3+wzoqJXw=="
-  "resolved" "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-9.4.1.tgz"
-  "version" "9.4.1"
+"@react-native-community/netinfo@^9.5.0":
+  "integrity" "sha512-sppTBobjvIlPYXyDAyb5WJoBaQq1hprnHj1PWICsA10mVnlmwX5ZVkgO2vGjsfFtb+fmWK9XtZF+aQ6ijqQcwg=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-9.5.0.tgz"
+  "version" "9.5.0"
 
 "@react-native-picker/picker@^2.4.10":
   "integrity" "sha512-EvAlHmPEPOwvbP6Pjg/gtDV3XJzIjIxr10fXFNlX5r9HeHw582G1Zt2o8FLyB718nOttgj8HYUTGxvhu4N65sQ=="

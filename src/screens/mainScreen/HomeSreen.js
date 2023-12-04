@@ -166,6 +166,13 @@ const HomeScreen = ({ navigation }) => {
                             </TouchableWithoutFeedback>
                         </View>
                     </View>
+                    <View style={styles.notice}>
+                        <MaterialCommunityIcons name="information" size={s(22)} color="white" />
+                        <View style={{ padding: s(10), width: "95%" }}>
+                            <Text style={{ color: "white", lineHeight: s(18), fontSize: s(12) }}>Your virtual account details is ready, but it's on hold. To unlock and start using it.  <TouchableOpacity onPress={() => navigation.navigate("VirtualAccount")}><Text style={{ color: "red" }}>Click here</Text></TouchableOpacity></Text>
+                        </View>
+
+                    </View>
                     {accountDetails.accountNo !== "N/A" ? <ImageBackground source={wall} style={styles.bg2} imageStyle={styles.bgImage2}>
                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingLeft: ms(30), paddingRight: ms(10), marginTop: s(7) }}>
 
@@ -694,6 +701,16 @@ const styles = StyleSheet.create({
         elevation: 5,
         margin: s(5),
     },
+    notice: {
+        padding: s(7),
+        marginTop: s(10),
+        alignItems: "center",
+        backgroundColor: "#1b2d56",
+        width: "95%",
+        marginLeft: "2%",
+        borderRadius: s(10),
+        flexDirection: "row",
+    }
 })
 
 export default HomeScreen

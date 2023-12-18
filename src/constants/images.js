@@ -71,5 +71,8 @@ export const whatsapp =  require('../assets/electricity/new/whatsapp.png')
 export const call =  require('../assets/electricity/new/call.png')
 export const mail =  require('../assets/electricity/new/mail.png')
 export const lock =  require('../assets/electricity/new/otplock.png')
+export const wrong =  require('../assets/wrong.png')
+export const release =  require('../assets/release.png')
+export const bell =  require('../assets/bell.png')
 
 

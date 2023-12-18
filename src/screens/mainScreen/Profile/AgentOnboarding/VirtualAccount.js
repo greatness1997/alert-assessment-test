@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, ScrollView, Text, View, TouchableOpacity, StatusBar, Image, TextInput, Alert, Platform } from 'react-native'
+import { StyleSheet, ScrollView, Text, View, TouchableOpacity, ActivityIndicator, StatusBar, Image, TextInput, Alert, Modal, Linking } from 'react-native'
 import { color } from '../../../../constants/color'
-import { Logo, FingerPrint, image } from '../../../../constants/images'
+import { Logo, FingerPrint, image, release, bell, wrong } from '../../../../constants/images'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { useFocusEffect } from '@react-navigation/native'
@@ -23,7 +23,7 @@ import moment from 'moment'
 import Clipboard from '@react-native-clipboard/clipboard'
 import Share from "react-native-share"
 
-import Unlock from '../Consent&Release'
+
 
 
 
@@ -46,6 +46,10 @@ const VirtualAccount = ({ navigation, route }) => {
     const [startText, setStartText] = useState('')
     const [userData, setUserData] = useState({})
     const [accountDetails, setAccountDetails] = useState(vfdAcctDetails)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [modalVisible2, setModalVisible2] = useState(false)
+    const [modalVisible3, setModalVisible3] = useState(false)
+    const [consentUrl, setConsentUrl] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -82,25 +86,26 @@ const VirtualAccount = ({ navigation, route }) => {
 
 
     const createVirtualAccount = async ({ bvn, dateOfBirth }) => {
-        console.log("hello")
-        console.log(bvn, dateOfBirth, "from from")
-        const url = `${cred.URL}/virtual-account-create`
+
+        const createUrl = `${cred.URL}/virtual-account-create`
         const options = { headers: { Authorization: `Bearer ${user.token}` } }
         const body = {
             bvn: bvn,
             dateOfBirth: dateOfBirth
         }
 
+
         try {
             setIsLoadking(true)
-            const response = await axios.post(url, body, options)
-            const { status, message, } = response.data
+            const response = await axios.post(createUrl, body, options)
+            const { status, message, url } = response.data
             console.log(response.data)
 
-            if (status === "success") {
+            if (status === "success" && url !== null) {
                 Alert.alert(`${status}`, `${message}`)
+                setConsentUrl(url)
+                setModalVisible(true)
                 setIsLoadking(false)
-                navigation.navigate("Profile")
             } else {
                 setError(message)
                 setIsLoadking(false)
@@ -109,9 +114,87 @@ const VirtualAccount = ({ navigation, route }) => {
 
 
         } catch (err) {
-            // console.log(error.response.data, 'from catch')
-            const { error } = err.response.data
+            // console.log(err.response.data, 'from catch')
+            const { error, message, status } = err.response.data
+            console.log(err.response.data)
+            Alert.alert(`${status}`, `${message}`)
             setError(`${error}`);
+            setIsLoadking(false)
+        }
+    }
+
+    const removeHold = async () => {
+
+        const createUrl = `${cred.URL}/virtual-account-create`
+        const options = { headers: { Authorization: `Bearer ${user.token}` } }
+        const body = {
+            bvn: userData.bvn,
+            dateOfBirth: formatDate(userData.dateOfBirth)
+        }
+
+        try {
+            setIsLoadking(true)
+            const response = await axios.post(createUrl, body, options)
+            const { status, message, url } = response.data
+            console.log(response.data)
+
+            if (status === "success" && url !== null) {
+
+                setConsentUrl(url)
+                setModalVisible(true)
+                setIsLoadking(false)
+            } else {
+                Alert.alert('error', `${message}`)
+                setIsLoadking(false)
+                setModalVisible(false)
+            }
+
+
+
+        } catch (err) {
+            console.log(err.response.data, 'from catch')
+            setModalVisible(false)
+            const { error, message, status } = err.response.data
+            Alert.alert(`${status}`, `${message}`)
+            // setError(`${error}`);
+            setIsLoadking(false)
+        }
+    }
+
+    const releaseAcc = async () => {
+
+        const createUrl = `${cred.URL}/virtual-account-create`
+        const options = { headers: { Authorization: `Bearer ${user.token}` } }
+        const body = {
+            bvn: userData.bvn,
+            dateOfBirth: formatDate(userData.dateOfBirth)
+        }
+
+        try {
+            setIsLoadking(true)
+            const response = await axios.post(createUrl, body, options)
+            const { status, message, url } = response.data
+
+            if (status === "success") {
+                setIsLoadking(false)
+                Alert.alert(`${status}`, `${message}`)
+                getProfile()
+                setModalVisible3(false)
+               
+            } else {
+                Alert.alert('error', `${message}`)
+                setIsLoadking(false)
+                setModalVisible3(false)
+            }
+
+
+
+        } catch (err) {
+            console.log(err.response.data, 'from catch')
+            setModalVisible3(false)
+            const { error, message, status } = err.response.data
+            Alert.alert(`${status}`, `${message}`)
+            // setError(`${error}`);
             setIsLoadking(false)
         }
     }
@@ -125,6 +208,7 @@ const VirtualAccount = ({ navigation, route }) => {
         try {
             const response = await axios.get(url, options)
             const { user } = response.data
+            console.log(user)
             setAccountDetails(user.vfdAcctDetails || vfdAcctDetails)
             setUserData(user)
         } catch (error) {
@@ -220,6 +304,73 @@ const VirtualAccount = ({ navigation, route }) => {
             alignItems: "center",
             justifyContent: "space-between"
         },
+        modalScreen2: {
+            flex: 1,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
+        transparentContainer2: {
+            flex: 1,
+            backgroundColor: 'transparent',
+        },
+        contentContainer2: {
+            flex: 0.5,
+            backgroundColor: '#060C27',
+            borderTopLeftRadius: s(20),
+            borderTopRightRadius: s(20),
+            paddingHorizontal: s(10),
+            paddingVertical: s(60),
+
+        },
+
+        modalScreen3: {
+            flex: 1,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
+        transparentContainer3: {
+            flex: 1,
+            backgroundColor: 'transparent',
+        },
+        contentContainer3: {
+            flex: 15,
+            backgroundColor: '#060C27',
+            borderTopLeftRadius: s(20),
+            borderTopRightRadius: s(20),
+            paddingHorizontal: s(10),
+            paddingVertical: s(60),
+
+        },
+
+        imageContainer: {
+            position: 'absolute',
+            top: 0,
+            width: '100%', // Set the width to 100% so that it spans the entire container
+            alignItems: 'center', // Center the image horizontally
+            marginTop: s(-50), // Adjust the top margin as needed
+        },
+        imageContainer2: {
+            // position: 'absolute',
+            alignSelf: "center",
+            marginTop: "30%"
+        },
+        imageContainer3: {
+            position: 'absolute',
+            top: 0,
+            width: '100%', // Set the width to 100% so that it spans the entire container
+            alignItems: 'center', // Center the image horizontally
+            marginTop: s(-60), // Adjust the top margin as needed
+        },
+        image: {
+            width: s(95),
+            height: s(95),
+            resizeMode: "contain"
+
+        },
+        image2: {
+            width: s(120),
+            height: s(120),
+            resizeMode: "contain"
+
+        },
     })
 
     return (
@@ -295,7 +446,7 @@ const VirtualAccount = ({ navigation, route }) => {
                     </Formik>
                 </View> : null}
 
-                {accountDetails.accountNo !== "N/A" ? <View style={{ marginTop: s(40) }}> 
+                {accountDetails.accountNo !== "N/A" ? <View style={{ marginTop: s(40) }}>
                     <View style={styles.modalScreen}>
                         <View style={styles.transparentContainer1} />
                         <View style={styles.contentContainer1}>
@@ -323,7 +474,7 @@ const VirtualAccount = ({ navigation, route }) => {
                                         <View style={styles.serviceContainer}>
                                             <View >
 
-                                                <Text style={{ fontWeight: "500", marginLeft: 20, fontSize: 12,  color: "black" }}>Bank Name</Text>
+                                                <Text style={{ fontWeight: "500", marginLeft: 20, fontSize: 12, color: "black" }}>Bank Name</Text>
                                                 <Text style={{ fontWeight: "bold", marginLeft: 20, fontSize: 15, marginTop: 5, color: "black" }}>{accountDetails.bank}</Text>
 
                                             </View>
@@ -365,14 +516,124 @@ const VirtualAccount = ({ navigation, route }) => {
                                 </View>
 
                                 {accountDetails.accountNo !== "N/A" ? <AppButton title="Share Account Details" style={{ marginTop: s(25) }} onPress={() => shareText()} /> : null}
+                                {accountDetails.accountNo !== "N/A" && !userData.bvnConsent ? <AppButton title="Grant Consent" style={{ marginTop: s(10) }} onPress={() => removeHold()} /> : null}
+                                {accountDetails.accountNo !== "N/A" && userData.bvnConsent && !userData.accountRelease ? <AppButton title="Release Account" isSubmitting={loading} style={{ marginTop: s(10) }} onPress={() => setModalVisible3(true)} /> : null}
                             </ScrollView>
                         </View>
                     </View>
                 </View> : null}
 
-                <Unlock />
+                {/* <Unlock /> */}
+
 
             </View>
+            <Modal
+                visible={modalVisible}
+                animationType='slide'
+                transparent={true}
+            >
+                <View style={styles.modalScreen2}>
+                    <View style={styles.transparentContainer2} />
+                    <View style={styles.contentContainer2}>
+                        <View style={styles.imageContainer}>
+                            <Image source={bell} style={styles.image} />
+                        </View>
+
+                        <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(20) }}>
+                            <Text style={{ color: "#F9FF58", fontSize: s(14), fontWeight: "bold", marginBottom: s(10) }}>BVN consent validation</Text>
+                            <Text style={{ color: "#E2E2E2", fontSize: s(14), textAlign: "center", paddingLeft: s(20), paddingRight: s(20) }}>Click 'I Agree' you have given us consent to authorize validation on your BVN</Text>
+                        </View>
+                        <View style={{ marginTop: s(40), flexDirection: "row", justifyContent: "space-evenly" }}>
+                            <TouchableOpacity onPress={() => { setModalVisible(false), setModalVisible2(true) }} style={{ width: s(150), height: s(55), borderColor: "#707070", borderWidth: 1, justifyContent: "center", alignItems: "center", borderRadius: s(30) }}>
+                                <Text style={{ color: "white", fontWeight: "bold", fontSize: s(14) }}>Not Now</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setModalVisible3(true);
+                                    if (consentUrl) {
+                                        Linking.openURL(consentUrl);
+                                    } else {
+                                        Alert.alert('Error', 'consentUrl is not available');
+                                    }
+                                }}
+                                style={{
+                                    width: s(150),
+                                    height: s(55),
+                                    backgroundColor: "#A9C2F8",
+                                    borderWidth: 1,
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    borderRadius: s(30)
+                                }}
+                            >
+                                <Text style={{ color: "#1B2D56", fontWeight: "bold", fontSize: s(14) }}>I Agree</Text>
+                            </TouchableOpacity>
+
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                visible={modalVisible3}
+                animationType='slide'
+                transparent={true}
+            >
+                <View style={styles.modalScreen2}>
+                    <View style={styles.transparentContainer2} />
+                    <View style={styles.contentContainer2}>
+                        <View style={styles.imageContainer3}>
+                            <Image source={release} style={styles.image2} />
+                        </View>
+
+                        <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(20) }}>
+                            <Text style={{ color: "#F9FF58", fontSize: s(14), fontWeight: "bold", marginBottom: s(5) }}>BVN consent validation</Text>
+                            <Text style={{ color: "#F9FF58", fontSize: s(14), fontWeight: "bold", marginBottom: s(10) }}>successful</Text>
+                            <Text style={{ color: "#E2E2E2", fontSize: s(14), textAlign: "center", paddingLeft: s(20), paddingRight: s(20) }}>Consent successfully given for your BVN, click release account to activate</Text>
+                        </View>
+                        <View style={{ marginTop: s(40), flexDirection: "row", justifyContent: "space-evenly" }}>
+
+                            <TouchableOpacity onPress={() => releaseAcc()} style={{ width: "90%", height: s(55), backgroundColor: "#A9C2F8", borderWidth: 1, justifyContent: "center", alignItems: "center", borderRadius: s(30) }}>
+                                {loading === true ?  <ActivityIndicator color="white" /> : <Text style={{ color: "#1B2D56", fontWeight: "bold", fontSize: s(14) }}>Please release my account</Text>}
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                visible={modalVisible2}
+                animationType='slide'
+                transparent={true}
+            >
+                <View style={styles.modalScreen3}>
+                    <View style={styles.transparentContainer3} />
+                    <View style={styles.contentContainer3}>
+                        <View style={styles.imageContainer2}>
+                            <Image source={wrong} style={styles.image} />
+                        </View>
+
+                        <View style={{ marginTop: s(10) }}>
+                            <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(20) }}>
+                                <Text style={{ color: "#FF223B", fontSize: s(14), fontWeight: "bold", marginBottom: s(10) }}>Account won't be released</Text>
+                                <Text style={{ color: "#E2E2E2", fontSize: s(14), textAlign: "center", paddingLeft: s(20), paddingRight: s(20) }}>Are you sure you don't want to release your account?</Text>
+                            </View>
+                            <View style={{ marginTop: s(40), flexDirection: "row", justifyContent: "space-evenly" }}>
+                                <TouchableOpacity onPress={() => navigation.navigate("Home")} style={{ width: s(150), height: s(55), borderColor: "#D70018", borderWidth: 1, justifyContent: "center", alignItems: "center", borderRadius: s(30) }}>
+                                    <Text style={{ color: "#9F091A", fontWeight: "bold", fontSize: s(14) }}>Yes, Not Now</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => { setModalVisible2(false), setModalVisible(true) }} style={{ width: s(150), height: s(55), backgroundColor: "#A9C2F8", borderWidth: 1, justifyContent: "center", alignItems: "center", borderRadius: s(30) }}>
+                                    <Text style={{ color: "#1B2D56", fontWeight: "bold", fontSize: s(14) }}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </>
     )
 }

@@ -70,7 +70,6 @@ const Register = ({ navigation, route }) => {
             setIsLoadking(true);
             const response = await axios.post(url, res);
             const { status, message, activationPin } = response.data;
-            console.log(response.data)
 
             if (status === "success") {
                 if (activationPin === null) {
@@ -118,7 +117,7 @@ const Register = ({ navigation, route }) => {
                 <Text style={{ color: "white", fontSize: s(20), fontWeight: "bold", marginLeft: s(5), marginTop: s(5) }}>Account</Text>
                 <KeyboardAvoidView>
                     <Formik
-                        initialValues={{ email: "", firstName: "", lastName: "", phoneNumber: "", password: "", referenceEmail: "" }}
+                        initialValues={{ email: "", firstName: "", lastName: "", phoneNumber: "", password: "", referenceEmail: "", bvn: "", nin: "" }}
                         enableReinitialize={true}
                         onSubmit={(values) => {
                             Schema.validate(values)
@@ -178,6 +177,38 @@ const Register = ({ navigation, route }) => {
                                                 setError(null);
                                             }}
                                             value={values.lastName}
+                                        />
+                                    </View>
+
+                                    <Text style={{ color: "white", marginBottom: s(10), fontSize: s(12), marginLeft: s(5) }}>BVN</Text>
+                                    <View style={styles.loginContainer2}>
+                                        {/* <Text style={{ color: "white", fontWeight: "bold", fontSize: s(15), marginLeft: s(5) }}>+234</Text> */}
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder='Enter Your BVN'
+                                            placeholderTextColor="#414a5e"
+                                            keyboardType='numeric'
+                                            onChangeText={(text) => {
+                                                handleChange("bvn")(text);
+                                                setError(null);
+                                            }}
+                                            value={values.bvn}
+                                        />
+                                    </View>
+
+                                    <Text style={{ color: "white", marginBottom: s(10), fontSize: s(12), marginLeft: s(5) }}>NIN</Text>
+                                    <View style={styles.loginContainer2}>
+                                        {/* <Text style={{ color: "white", fontWeight: "bold", fontSize: s(15), marginLeft: s(5) }}>+234</Text> */}
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder='Enter your NIN'
+                                            placeholderTextColor="#414a5e"
+                                            keyboardType='numeric'
+                                            onChangeText={(text) => {
+                                                handleChange("nin")(text);
+                                                setError(null);
+                                            }}
+                                            value={values.nin}
                                         />
                                     </View>
 

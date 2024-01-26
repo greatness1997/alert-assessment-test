@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Dimensions, View, SafeAreaView, StatusBar, StyleSheet, Modal, Text, ImageBackground, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Alert, Platform } from 'react-native'
-import { image, swit, wallet, wall, backgroundImage, Logo, LogoBlue, Add, Send, Airtime, Data, Electricity, CableTv, Others, Insurance, ServiceView, Ads } from '../../constants/images'
+import { image, swit, wallet, wall, backgroundImage, Logo, LogoBlue, Add, Send, Airtime, Data, Electricity, CableTv, Others, Insurance, inventory } from '../../constants/images'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux'
@@ -149,7 +149,7 @@ const HomeScreen = ({ navigation }) => {
 
 
     return (
-        <>
+        <View style={{ backgroundColor: "#fafafa" }}>
             <StatusBar barStyle="dark-content" />
             <SafeAreaView>
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -294,6 +294,26 @@ const HomeScreen = ({ navigation }) => {
                                     <Text style={{ fontSize: s(12), color: "black" }}>Others</Text>
                                 </View>
                             </TouchableOpacity>
+                        </View>
+
+                        <View style={{ right: s(105)}}>
+                            <TouchableOpacity onPress={() => navigation.navigate("Invetory")} style={[styles.product2, styles.boxShadow]}>
+                                <View style={styles.newTag}>
+                                    <Text style={{ color: "#F7DA4C", fontWeight: "600", fontSize: s(10) }}>NEW</Text>
+                                </View>
+                                <Image source={inventory} style={{ width: s(40), height: s(45), marginTop: s(10) }} />
+                                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: s(2) }}>
+                                    <Text style={{ fontSize: s(12), color: "black" }}>Inventory App</Text>
+                                </View>
+                            </TouchableOpacity>
+
+                            {/* <View style={[styles.product1,]}>
+
+                            </View>
+
+                            <View style={[styles.product1]}>
+
+                            </View> */}
                         </View>
                     </View>
 
@@ -489,7 +509,7 @@ const HomeScreen = ({ navigation }) => {
                     </Modal>
                 </ScrollView>
             </SafeAreaView>
-        </>
+        </View>
     )
 }
 
@@ -690,6 +710,21 @@ const styles = StyleSheet.create({
         borderRadius: s(10),
         alignItems: 'center'
     },
+    product2: {
+        width: s(95),
+        height: s(90),
+        backgroundColor: "white",
+        borderRadius: s(10),
+        alignItems: 'center',
+    },
+    product1: {
+        width: s(95),
+        height: s(90),
+        backgroundColor: "#fafafa",
+        marginRight: s(8),
+        borderRadius: s(10),
+        alignItems: 'center'
+    },
     boxShadow: {
         shadowColor: '#000',
         shadowOffset: {
@@ -710,6 +745,17 @@ const styles = StyleSheet.create({
         marginLeft: "2%",
         borderRadius: s(10),
         flexDirection: "row",
+    },
+    newTag: {
+        backgroundColor: "#00226F",
+        width: s(40),
+        height: s(20),
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: s(10),
+        position: "absolute",
+        top: s(-5),
+        left: s(70),
     }
 })
 

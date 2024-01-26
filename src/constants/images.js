@@ -75,4 +75,20 @@ export const wrong =  require('../assets/wrong.png')
 export const release =  require('../assets/release.png')
 export const bell =  require('../assets/bell.png')
 
+export const inventory =  require('../assets/inventory.png')
+export const invList =  require('../assets/invList.png')
+
+export const amala =  require('../assets/amala.png')
+export const beans =  require('../assets/beans.png')
+export const bike =  require('../assets/bike.png')
+export const bugger =  require('../assets/bugger.png')
+export const eforiro =  require('../assets/eforiro.png')
+export const dress =  require('../assets/dress.png')
+export const rice =  require('../assets/rice.png')
+export const icecream =  require('../assets/icecream.png')
+
+export const fullAmala =  require('../assets/fullAmala.png')
+export const cryspy =  require('../assets/cryspy.png')
+export const grilled =  require('../assets/grilled.png')
+
 

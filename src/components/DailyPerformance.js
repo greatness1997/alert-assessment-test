@@ -271,9 +271,9 @@ export default function () {
 
             <View>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
-                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: activeBox === 0 ? '#3e6bff' : 'white', marginHorizontal: 5 }}></View>
-                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: activeBox === 1 ? '#3e6bff' : 'white', marginHorizontal: 5 }}></View>
-                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: activeBox === 2 ? '#3e6bff' : 'white', marginHorizontal: 5 }}></View>
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: activeBox === 0 ? '#3e6bff' : 'lightgrey', marginHorizontal: 5 }}></View>
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: activeBox === 1 ? '#3e6bff' : 'lightgrey', marginHorizontal: 5 }}></View>
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: activeBox === 2 ? '#3e6bff' : 'lightgrey', marginHorizontal: 5 }}></View>
                 </View>
             </View>
         </>

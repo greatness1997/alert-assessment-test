@@ -33,6 +33,7 @@ import StartimesCompleted from '../../mainScreen/Tv/StartimesCompleted';
 import VirtualAccount from '../../mainScreen/Profile/AgentOnboarding/VirtualAccount';
 import WalletHistory from '../../mainScreen/WalletHistory';
 import WalletHistoryList from '../../mainScreen/WalletHistoryList';
+import InventoryStack from './InventoryStack';
 
 
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,7 @@ const HomeStack = () => {
             <Stack.Screen name='VirtualAccount' component={VirtualAccount} />
             <Stack.Screen name='WalletHistory' component={WalletHistory} />
             <Stack.Screen name='WalletHistoryList' component={WalletHistoryList} />
+            <Stack.Screen name='Invetory' component={InventoryStack} />
         </Stack.Navigator>
     )
 }

@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     text: {
-        fontWeight: 'bold',
+        fontWeight: '600',
         // textTransform: 'uppercase',
-        fontSize: 18,
+        fontSize: 16,
         color: "white",
     },
 });

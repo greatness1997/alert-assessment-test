@@ -53,7 +53,8 @@ const TabNavigator = () => {
         'WalletHistory',
         'WalletHistoryList',
         'HistoryReceipt',
-        'liveChat'
+        'liveChat',
+        'Invetory'
     ];
 
     return (

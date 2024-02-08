@@ -22,6 +22,7 @@ const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data,
             const deviceId = DeviceInfo.getUniqueId();
             const deviceName = DeviceInfo.getModel();
             setPhoneId(deviceId._j)
+            console.log(deviceId._j)
         };
 
         fetchDeviceInformation();

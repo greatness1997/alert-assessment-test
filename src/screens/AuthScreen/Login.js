@@ -83,6 +83,7 @@ const Login = ({ navigation, route }) => {
         const body = {
             login: res.login,
             password: res.password,
+            channel: "mobile",
             deviceId: phoneId._j.toString(),
             deviceName: phoneName,
             all

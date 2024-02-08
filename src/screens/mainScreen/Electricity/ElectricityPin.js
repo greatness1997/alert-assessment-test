@@ -25,6 +25,7 @@ const ElectricityPin = ({ code, setCode, setPinReady, maxLength, navigation, dat
             const deviceId = DeviceInfo.getUniqueId();
             const deviceName = DeviceInfo.getModel();
             setPhoneId(deviceId._j)
+            console.log(deviceId._j)
         };
 
         fetchDeviceInformation();

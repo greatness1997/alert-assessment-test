@@ -8,13 +8,29 @@ import axios from 'axios'
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import LoadingScreen from '../../../components/Loading'
 
+import DeviceInfo from 'react-native-device-info';
 
 
-const StartimesPin = ({ code, setCode, setPinReady, maxLength, navigation, data, value, price, cod, name,  setModalVisible }) => {
+
+
+const StartimesPin = ({ code, setCode, setPinReady, maxLength, navigation, data, value, price, cod, name, setModalVisible }) => {
     const [isContFocus, setIsConFocus] = useState(false)
     const [loading, setIsLoading] = useState(false)
     const inputRef = useRef(null)
-    
+
+    const [phoneId, setPhoneId] = useState("")
+
+
+    useEffect(() => {
+        const fetchDeviceInformation = async () => {
+            const deviceId = DeviceInfo.getUniqueId();
+            const deviceName = DeviceInfo.getModel();
+            setPhoneId(deviceId._j)
+        };
+
+        fetchDeviceInformation();
+    }, []);
+
 
     const digitArray = new Array(maxLength).fill(0)
 
@@ -41,18 +57,18 @@ const StartimesPin = ({ code, setCode, setPinReady, maxLength, navigation, data,
     }
 
     useEffect(() => {
-        if(code.length === maxLength){
+        if (code.length === maxLength) {
             tvPayment()
             setCode('')
         }
-       
-        
+
+
     }, [code])
 
     const { auth: { user } } = useSelector(state => state)
 
-     //generate uniqueId
-     const generateUniqueId = () => {
+    //generate uniqueId
+    const generateUniqueId = () => {
         const d = new Date();
         const n = d.getTime();
         const p = user.firstName.substring(0, 5).toUpperCase();
@@ -64,7 +80,7 @@ const StartimesPin = ({ code, setCode, setPinReady, maxLength, navigation, data,
         setIsLoading(true)
         const url = `${cred.URL}/vas/startimes/payment`
         const options = { headers: { Authorization: cred.API_KEY, Token: user.token } }
-        const body =  {
+        const body = {
             "transactionId": data.transactionId,
             "phoneNumber": value.phoneNumber,
             "bouquetCode": cod,
@@ -73,9 +89,10 @@ const StartimesPin = ({ code, setCode, setPinReady, maxLength, navigation, data,
             "type": "subscription",
             "paymentMethod": "cash",
             "uniqueId": generateUniqueId(),
-            "pin": code
+            "pin": code,
+            "deviceId": phoneId
         }
-    
+
 
         try {
             const data = await axios.post(url, body, options)
@@ -104,26 +121,26 @@ const StartimesPin = ({ code, setCode, setPinReady, maxLength, navigation, data,
 
     return (
         <>
-        <Pressable style={styles.container} onPress={handlePress}>
-            {/* <View style={styles.box}> */}
+            <Pressable style={styles.container} onPress={handlePress}>
+                {/* <View style={styles.box}> */}
                 {/* <Text style={styles.text}></Text> */}
                 {digitArray.map(digitInput)}
-            {/* </View> */}
-        </Pressable>
-        
-        <View style={styles.inputBox}>
-            <TextInput 
-                keyboardType='numeric'
-                value={code}
-                onChangeText={setCode}
-                maxLength={maxLength}
-                textContentType='oneTimeCode'
-                returnKeyType='done'
-                ref={inputRef}
-                onBlur={handleOnBlur}
-            />
-        </View>
-        {loading && <LoadingScreen />}
+                {/* </View> */}
+            </Pressable>
+
+            <View style={styles.inputBox}>
+                <TextInput
+                    keyboardType='numeric'
+                    value={code}
+                    onChangeText={setCode}
+                    maxLength={maxLength}
+                    textContentType='oneTimeCode'
+                    returnKeyType='done'
+                    ref={inputRef}
+                    onBlur={handleOnBlur}
+                />
+            </View>
+            {loading && <LoadingScreen />}
         </>
     )
 }
@@ -134,8 +151,8 @@ const styles = StyleSheet.create({
         width: 1,
         height: 1,
         opacity: 0
-     },
-     box: {
+    },
+    box: {
         borderWidth: 2,
         borderColor: "grey",
         width: s(45),

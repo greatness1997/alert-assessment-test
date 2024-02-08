@@ -8,12 +8,28 @@ import axios from 'axios'
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import LoadingScreen from '../../../components/Loading'
 
+import DeviceInfo from 'react-native-device-info';
+
+
 
 
 const TvPin = ({ code, setCode, setPinReady, maxLength, navigation, data, value, price, cod, month,  setModalVisible }) => {
     const [isContFocus, setIsConFocus] = useState(false)
     const [loading, setIsLoading] = useState(false)
     const inputRef = useRef(null)
+
+    const [phoneId, setPhoneId] = useState("")
+
+
+    useEffect(() => {
+        const fetchDeviceInformation = async () => {
+            const deviceId = DeviceInfo.getUniqueId();
+            const deviceName = DeviceInfo.getModel();
+            setPhoneId(deviceId._j)
+        };
+
+        fetchDeviceInformation()
+    }, []);
     
 
     const digitArray = new Array(maxLength).fill(0)
@@ -76,7 +92,8 @@ const TvPin = ({ code, setCode, setPinReady, maxLength, navigation, data, value,
             "addonPrice": "",
             "addonCode": "",
             "pin": code,
-            "paymentMethod": "cash"
+            "paymentMethod": "cash",
+            "deviceId": phoneId
         }
 
         try {

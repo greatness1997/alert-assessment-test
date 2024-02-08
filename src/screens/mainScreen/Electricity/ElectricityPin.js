@@ -8,15 +8,29 @@ import axios from 'axios'
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import LoadingScreen from '../../../components/Loading'
 
+import DeviceInfo from 'react-native-device-info';
+
+
 
 
 const ElectricityPin = ({ code, setCode, setPinReady, maxLength, navigation, data, value, setModalVisible }) => {
     const [isContFocus, setIsConFocus] = useState(false)
     const [loading, setIsLoading] = useState(false)
+    const [phoneId, setPhoneId] = useState("")
     const inputRef = useRef(null)
 
-    console.log(data)
-    
+
+    useEffect(() => {
+        const fetchDeviceInformation = async () => {
+            const deviceId = DeviceInfo.getUniqueId();
+            const deviceName = DeviceInfo.getModel();
+            setPhoneId(deviceId._j)
+        };
+
+        fetchDeviceInformation();
+    }, []);
+
+
 
     const digitArray = new Array(maxLength).fill(0)
 
@@ -43,18 +57,18 @@ const ElectricityPin = ({ code, setCode, setPinReady, maxLength, navigation, dat
     }
 
     useEffect(() => {
-        if(code.length === maxLength){
+        if (code.length === maxLength) {
             electricityPayment()
             setCode('')
         }
-       
-        
+
+
     }, [code])
 
     const { auth: { user } } = useSelector(state => state)
 
-     //generate uniqueId
-     const generateUniqueId = () => {
+    //generate uniqueId
+    const generateUniqueId = () => {
         const d = new Date();
         const n = d.getTime();
         const p = user.firstName.substring(0, 5).toUpperCase();
@@ -71,8 +85,9 @@ const ElectricityPin = ({ code, setCode, setPinReady, maxLength, navigation, dat
             "transactionId": data.transactionId,
             "uniqueId": generateUniqueId(),
             "paymentMethod": "cash",
-            "pin": code
-          }
+            "pin": code,
+            "deviceId": phoneId,
+        }
 
 
         try {
@@ -102,26 +117,26 @@ const ElectricityPin = ({ code, setCode, setPinReady, maxLength, navigation, dat
 
     return (
         <>
-        <Pressable style={styles.container} onPress={handlePress}>
-            {/* <View style={styles.box}> */}
+            <Pressable style={styles.container} onPress={handlePress}>
+                {/* <View style={styles.box}> */}
                 {/* <Text style={styles.text}></Text> */}
                 {digitArray.map(digitInput)}
-            {/* </View> */}
-        </Pressable>
-        
-        <View style={styles.inputBox}>
-            <TextInput 
-                keyboardType='numeric'
-                value={code}
-                onChangeText={setCode}
-                maxLength={maxLength}
-                textContentType='oneTimeCode'
-                returnKeyType='done'
-                ref={inputRef}
-                onBlur={handleOnBlur}
-            />
-        </View>
-        {loading && <LoadingScreen />}
+                {/* </View> */}
+            </Pressable>
+
+            <View style={styles.inputBox}>
+                <TextInput
+                    keyboardType='numeric'
+                    value={code}
+                    onChangeText={setCode}
+                    maxLength={maxLength}
+                    textContentType='oneTimeCode'
+                    returnKeyType='done'
+                    ref={inputRef}
+                    onBlur={handleOnBlur}
+                />
+            </View>
+            {loading && <LoadingScreen />}
         </>
     )
 }
@@ -132,8 +147,8 @@ const styles = StyleSheet.create({
         width: 1,
         height: 1,
         opacity: 0
-     },
-     box: {
+    },
+    box: {
         borderWidth: 2,
         borderColor: "grey",
         width: s(45),

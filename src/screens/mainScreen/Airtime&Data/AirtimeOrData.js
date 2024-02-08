@@ -12,9 +12,11 @@ import { useSelector } from 'react-redux'
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 // import { useSelector } from 'react-redux'
 import KeyboardAvoidingViewNB from '../../../components/KeyboardAvoidingView'
+import Geolocation from '@react-native-community/geolocation';
+
+
 
 const AirtimeData = ({ navigation, route }) => {
-
 
     const network = [
         { name: "Mtn", image: mtn },
@@ -22,6 +24,8 @@ const AirtimeData = ({ navigation, route }) => {
         { name: "Airtel", image: airtel },
         { name: "9mobile", image: nineMobile },
     ]
+
+ 
 
     const [selectedOption, setSelectedOption] = useState("Airtime")
     const [phase, setPhase] = useState(1)
@@ -33,6 +37,29 @@ const AirtimeData = ({ navigation, route }) => {
     const [itemCode, setItemCode] = useState("")
     const [tranId, setTranId] = useState("")
     const [amnt, setAmnt] = useState("")
+
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+    
+
+    const position = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                setLatitude(position.coords.latitude)
+                setLongitude(position.coords.longitude)
+                console.log(position.coords.latitude, position.coords.longitude)
+            },
+            error => {
+                console.error('Error getting location:', error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
+    };
+
+    useEffect(() => {
+        position()
+    }, []);
+
 
     const handleOptionPress = (option) => {
         setSelectedOption(option)
@@ -79,6 +106,8 @@ const AirtimeData = ({ navigation, route }) => {
         const body = {
             "channel": "mobile",
             "service": `${item}data`,
+            "longitude": longitude,
+            "latitude": latitude,
         }
 
         try {
@@ -96,10 +125,6 @@ const AirtimeData = ({ navigation, route }) => {
     }
 
 
-
-
-
-
     return (
         <>
             <View style={{ flexDirection: "row", marginTop: s(50), marginLeft: s(18) }}>
@@ -108,7 +133,7 @@ const AirtimeData = ({ navigation, route }) => {
                 </TouchableWithoutFeedback>
 
                 <View style={{ justifyContent: "center", marginLeft: s(90) }}>
-                    <Text style={{ fontSize: s(16), fontWeight: "bold", color: "black"}}>Airtime & Data</Text>
+                    <Text style={{ fontSize: s(16), fontWeight: "bold", color: "black" }}>Airtime & Data</Text>
                 </View>
 
             </View>
@@ -181,7 +206,7 @@ const AirtimeData = ({ navigation, route }) => {
 
                                                     <View style={{ flexDirection: 'row-reverse', alignItems: 'center', padding: s(5) }}>
                                                         <TouchableWithoutFeedback onPress={close}>
-                                                            <MaterialCommunityIcons name="close-circle" size={s(22)} color="black"  />
+                                                            <MaterialCommunityIcons name="close-circle" size={s(22)} color="black" />
                                                         </TouchableWithoutFeedback>
                                                     </View>
 

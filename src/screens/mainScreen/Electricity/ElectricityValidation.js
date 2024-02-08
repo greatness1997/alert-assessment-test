@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableWithoutFeedback, TextInput, TouchableOpacity, ScrollView, Alert, Image } from 'react-native'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { color } from '../../../constants/color'
@@ -10,6 +10,8 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import KeyboardAvoidView from '../../../components/KeyboardAvoidingView'
+
+import Geolocation from '@react-native-community/geolocation';
 
 
 
@@ -25,6 +27,25 @@ const ElectricityValidation = ({ navigation, route }) => {
     const [responseData, setResponseData] = useState({})
     const [error, setError] = useState("")
     const [value, setValues] = useState({})
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+
+    const position = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                setLatitude(position.coords.latitude)
+                setLongitude(position.coords.longitude)
+            },
+            error => {
+                console.error('Error getting location:', error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
+    };
+
+    useEffect(() => {
+        position()
+    }, [])
 
     const handleOptionPress = (option) => {
         setSelectedOption(option)
@@ -46,7 +67,9 @@ const ElectricityValidation = ({ navigation, route }) => {
             "accountType": phase === 1 ? "prepaid" : "postpaid",
             "service": name,
             "amount": amount,
-            "channel": "mobile"
+            "channel": "mobile",
+            "longitude": longitude,
+            "latitude": latitude,
         }
 
 

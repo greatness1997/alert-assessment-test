@@ -23,6 +23,8 @@ import DataVerify from './DataVerify';
 import "intl"
 import "intl/locale-data/jsonp/en";
 import AppButton from '../../../components/AppButtonBlue';
+import DeviceInfo from 'react-native-device-info';
+import Geolocation from '@react-native-community/geolocation';
 
 
 

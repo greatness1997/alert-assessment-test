@@ -296,7 +296,7 @@ const HomeScreen = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{ right: s(105)}}>
+                        {/* <View style={{ right: s(105)}}>
                             <TouchableOpacity onPress={() => navigation.navigate("Invetory")} style={[styles.product2, styles.boxShadow]}>
                                 <View style={styles.newTag}>
                                     <Text style={{ color: "#F7DA4C", fontWeight: "600", fontSize: s(10) }}>NEW</Text>
@@ -307,14 +307,7 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                             </TouchableOpacity>
 
-                            {/* <View style={[styles.product1,]}>
-
-                            </View>
-
-                            <View style={[styles.product1]}>
-
-                            </View> */}
-                        </View>
+                        </View> */}
                     </View>
 
                     <Modal

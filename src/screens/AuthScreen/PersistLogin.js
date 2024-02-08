@@ -14,6 +14,8 @@ import { useDispatch } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import TouchID from 'react-native-touch-id'
 
+import DeviceInfo from 'react-native-device-info';
+
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 
 const PersistLogin = ({ navigation, route }) => {
@@ -25,6 +27,20 @@ const PersistLogin = ({ navigation, route }) => {
     const [asyncData, setAsyncData] = useState({})
     const [biometrics, setBiometrics] = useState('');
     const [bioValue, setBioValue] = useState(false)
+    const [ phoneId, setPhoneId ] = useState("")
+    const [ phoneName, setPhoneName ] = useState("")
+
+
+    useEffect(() => {
+        const fetchDeviceInformation = async () => {
+          const deviceId = DeviceInfo.getUniqueId();
+          const deviceName = DeviceInfo.getModel();
+          setPhoneId(deviceId._j)
+          setPhoneName(deviceName)
+        };
+    
+        fetchDeviceInformation();
+      }, []);
 
     const dispatch = useDispatch()
 
@@ -36,9 +52,13 @@ const PersistLogin = ({ navigation, route }) => {
 
     const Login = async (res) => {
 
-        console.log(res)
-
         const url = `${cred.URL}/auth/get-token`
+        const body = {
+            login: res.login,
+            password: res.password,
+            deviceId: phoneId,
+            deviceName: phoneName
+        }
 
         try {
             setIsLoadking(true)

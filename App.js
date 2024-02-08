@@ -17,12 +17,31 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import OfflineNotice from "./src/screens/OfflineNotice";
 import codePush from "react-native-code-push";
 
+import { request, PERMISSIONS } from 'react-native-permissions';
+
 
 
 
 
 
 const app = () => {
+
+   useEffect(() => {
+    const requestLocationPermission = async () => {
+      try {
+        const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+        if (result === 'granted') {
+          console.log('Location permission granted');
+        } else {
+          console.log('Location permission denied');
+        }
+      } catch (error) {
+        console.error('Error requesting location permission:', error);
+      }
+    };
+
+    requestLocationPermission();
+  }, []);
 
   return (
     <>

@@ -90,7 +90,6 @@ const CompleteDetails = ({ navigation, route }) => {
         const url = `${cred.URL}/mobile/complete-details`
         const options = { headers: { Authorization: `Bearer ${user.token}` } }
         const body = {
-            "bvn": res.bvn,
             "dateOfBirth": startText,
             "gender": genderText,
             "address":res.address
@@ -158,7 +157,7 @@ const CompleteDetails = ({ navigation, route }) => {
 
                 <KeyboardAvoidView>
                     <Formik
-                        initialValues={{ bvn: "", address: "" }}
+                        initialValues={{ address: "" }}
                         enableReinitialize={true}
                         onSubmit={(values) => {
                             Schema.validate(values)
@@ -237,22 +236,6 @@ const CompleteDetails = ({ navigation, route }) => {
                                             </TouchableOpacity>
                                             <Text style={{ color: "white", fontWeight: "500", fontSize: s(13), marginLeft: s(6) }}>{genderText}</Text>
                                         </View>
-                                    </View>
-
-                                    <Text style={{ color: "white", marginTop: s(20), marginBottom: s(5), fontSize: s(12), marginLeft: s(5) }}>Bank Verification Number (BVN)</Text>
-                                    <View style={styles.loginContainer3}>
-                                        {/* <Text style={{ color: "white", fontWeight: "bold", fontSize: s(15), marginLeft: s(5) }}>+234</Text> */}
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder='11 Digit Number'
-                                            placeholderTextColor="#414a5e"
-                                            keyboardType='numeric'
-                                            onChangeText={(text) => {
-                                                handleChange("bvn")(text);
-                                                setError(null);
-                                            }}
-                                            value={values.bvn}
-                                        />
                                     </View>
 
                                    <Text style={{ marginLeft: 5, marginTop: 10, color: "#c66e54", fontSize: 12 }}>BVN is not required </Text>

@@ -7,13 +7,26 @@ import cred from '../../../config'
 import axios from 'axios'
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import LoadingScreen from '../../../components/Loading'
+import DeviceInfo from 'react-native-device-info';
+
 
 
 const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data, setModalVisible }) => {
     const [isContFocus, setIsConFocus] = useState(false)
+    const [phoneId, setPhoneId] = useState("")
     const [loading, setIsLoading] = useState(false)
     const inputRef = useRef(null)
 
+    useEffect(() => {
+        const fetchDeviceInformation = async () => {
+            const deviceId = DeviceInfo.getUniqueId();
+            const deviceName = DeviceInfo.getModel();
+            setPhoneId(deviceId._j)
+        };
+
+        fetchDeviceInformation();
+    }, []);
+    
     // const network = data.networkName.toLowerCase()
     const network = data.networkName === "Airtel" || data.networkName === "Glo" || data.networkName === "Mtn" ? data.networkName.toLowerCase() : data.networkName
 
@@ -73,7 +86,8 @@ const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data,
             "code": data.itemCode,
             "service": `${network}data`,
             "paymentMethod": "cash",
-            "pin": code
+            "pin": code,
+            "deviceId": phoneId,
         }
 
 

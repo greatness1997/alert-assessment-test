@@ -10,6 +10,7 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import * as Yup from 'yup'
 import KeyboardAvoidView from '../../../components/KeyboardAvoidingView'
+import Geolocation from '@react-native-community/geolocation';
 
 
 
@@ -30,6 +31,22 @@ const TvValidation = ({ navigation, route }) => {
     const [code, setCode] = useState('')
     const [pric, setPric] = useState('')
     const [mont, setMont] = useState('')
+
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+
+    const position = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                setLatitude(position.coords.latitude)
+                setLongitude(position.coords.longitude)
+            },
+            error => {
+                console.error('Error getting location:', error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
+    };
 
     const handleOptionPress = (option) => {
         setSelectedOption(option)
@@ -78,6 +95,7 @@ const TvValidation = ({ navigation, route }) => {
 
     useEffect(() => {
         getBouquet()
+        position()
     }, [])
 
 
@@ -88,7 +106,9 @@ const TvValidation = ({ navigation, route }) => {
             "decoderType": name,
             "iuc": value,
             "service": "multichoice",
-            "channel": "mobile"
+            "channel": "mobile",
+            "longitude": longitude,
+            "latitude": latitude,
         }
 
         try {

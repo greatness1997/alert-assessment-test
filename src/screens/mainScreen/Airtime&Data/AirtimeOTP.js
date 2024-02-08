@@ -4,15 +4,49 @@ import { color } from '../../../constants/color'
 import { useSelector } from "react-redux"
 
 import cred from '../../../config'
+import DeviceInfo from 'react-native-device-info';
 import axios from 'axios'
 
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import LoadingScreen from '../../../components/Loading'
 
+import Geolocation from '@react-native-community/geolocation';
+
 
 const AirtimeOTP = ({ code, setCode, setPinReady, maxLength, navigation, data, secureTextEntry, setModalVisible }) => {
     const [isContFocus, setIsConFocus] = useState(false)
     const [loading, setIsLoading] = useState(false)
+    const [phoneId, setPhoneId] = useState("")
+
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+
+    const position = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                setLatitude(position.coords.latitude)
+                setLongitude(position.coords.longitude)
+            },
+            error => {
+                console.error('Error getting location:', error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
+    };
+
+
+
+    useEffect(() => {
+        const fetchDeviceInformation = async () => {
+            const deviceId = DeviceInfo.getUniqueId();
+            const deviceName = DeviceInfo.getModel();
+            setPhoneId(deviceId._j)
+        };
+
+        fetchDeviceInformation();
+        position()
+    }, []);
+
     const inputRef = useRef(null)
 
     const network = data.networkName === "Airtel" || data.networkName === "Glo" || data.networkName === "Mtn" ? data.networkName.toLowerCase() : data.networkName
@@ -72,7 +106,10 @@ const AirtimeOTP = ({ code, setCode, setPinReady, maxLength, navigation, data, s
             "service": `${network}vtu`,
             "uniqueId": generateUniqueId(),
             "paymentMethod": "cash",
-            "pin": code
+            "pin": code,
+            "deviceId": phoneId,
+            "longitude": longitude,
+            "latitude": latitude,
         }
 
 
@@ -123,7 +160,7 @@ const AirtimeOTP = ({ code, setCode, setPinReady, maxLength, navigation, data, s
                     secureTextEntry={true}
                 />
             </View>
-            { loading && <LoadingScreen /> }
+            {loading && <LoadingScreen />}
         </>
     )
 }

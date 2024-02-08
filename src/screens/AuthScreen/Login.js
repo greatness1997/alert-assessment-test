@@ -22,6 +22,7 @@ import ToastNotification from '../../components/Toast'
 
 
 
+
 const Login = ({ navigation, route }) => {
 
     const [loading, setIsLoadking] = useState(false)
@@ -29,6 +30,23 @@ const Login = ({ navigation, route }) => {
     const [visible, setVisible] = useState(true)
     const [messageOne, setMessageOne] = useState('')
     const [isToastVisible, setIsToastVisible] = useState(false)
+    const [ phoneId, setPhoneId ] = useState("")
+    const [ phoneName, setPhoneName ] = useState("")
+    const [all, setAll] = useState({})
+
+
+    useEffect(() => {
+        const fetchDeviceInformation = async () => {
+          const deviceId = DeviceInfo.getUniqueId();
+          const deviceName = DeviceInfo.getModel();
+
+          setPhoneId(deviceId)
+          setAll(deviceId)
+          setPhoneName(deviceName)
+        };
+    
+        fetchDeviceInformation();
+      }, []);
 
     const dispatch = useDispatch()
 
@@ -62,11 +80,19 @@ const Login = ({ navigation, route }) => {
     const Login = async (res) => {
 
         const url = `${cred.URL}/auth/get-token`
+        const body = {
+            login: res.login,
+            password: res.password,
+            deviceId: phoneId._j.toString(),
+            deviceName: phoneName,
+            all
+        }
 
         try {
             setIsLoadking(true)
-            const response = await axios.post(url, res)
+            const response = await axios.post(url, body)
             const { status, message, userData, token } = response.data
+            console.log(token)
 
             if (status !== "success") {
                 showToast(message);

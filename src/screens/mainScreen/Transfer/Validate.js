@@ -13,6 +13,8 @@ import KeyboardAvoidingViewNB from '../../../components/KeyboardAvoidingView';
 
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 
+import Geolocation from '@react-native-community/geolocation';
+
 
 
 const Validate = ({ navigation }) => {
@@ -26,8 +28,27 @@ const Validate = ({ navigation }) => {
     const [tranId, setTranId] = useState("")
     const [tranRes, setTranRes] = useState({})
     const [anError, setAnError] = useState(null)
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
 
     const [filteredBanks, setFilteredBanks] = useState([]);
+
+    const position = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                setLatitude(position.coords.latitude)
+                setLongitude(position.coords.longitude)
+            },
+            error => {
+                console.error('Error getting location:', error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
+    };
+
+    useEffect(() => {
+        position()
+    }, [])
 
     const filterBanks = (text) => {
         if (text === '') {
@@ -90,7 +111,9 @@ const Validate = ({ navigation }) => {
             "amount": amount,
             "accountNo": accountNo,
             "bankCode": bankName.bankCode,
-            "channel": "mobile"
+            "channel": "mobile",
+            "longitude": longitude,
+            "latitude": latitude,
         }
 
         try {

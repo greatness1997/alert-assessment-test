@@ -113,6 +113,7 @@ const AirtimeData = ({ navigation, route }) => {
         try {
             const data = await axios.post(url, body, options)
             const { response, transactionId } = data.data
+            console.log(response)
             setTranId(transactionId)
             setDataPlan(response.data)
             setIsLoading(false)
@@ -344,9 +345,9 @@ const AirtimeData = ({ navigation, route }) => {
                                                     <TouchableOpacity style={{ marginBottom: s(13) }} key={key} onPress={() => thePlan(item.allowance, item.amount, item.validity, item.code)}>
                                                         <View style={{ flexDirection: "row", justifyContent: "space-between", padding: s(8) }}>
                                                             <View style={{ flexDirection: "row" }}>
-                                                                <Text style={{ marginRight: 5, color: "grey" }}>{item.allowance}</Text>
-                                                                <Text style={{ color: "grey" }}>for</Text>
-                                                                <Text style={{ marginLeft: 5, color: "grey" }}>{`₦${item.amount}`}</Text>
+                                                                {item.allowance ? <Text style={{ marginRight: 5, color: "grey" }}>{item.allowance}</Text> : <Text style={{ marginRight: 5, color: "grey" }}>{item.description}</Text>}
+                                                                {item.allowance ? <Text style={{ color: "grey" }}>for</Text> : null}
+                                                                {item.allowance ? <Text style={{ marginLeft: 5, color: "grey" }}>{`₦${item.amount}`}</Text> : null }
                                                             </View>
                                                             <View>
                                                                 <Text style={{ color: "grey" }}>{item.validity}</Text>

@@ -17,6 +17,7 @@ const InputFieldOTP = ({ code, setCode, setPinReady, maxLength, navigation, data
     const [isContFocus, setIsConFocus] = useState(false)
     const [loading, setIsLoading] = useState(false)
     const inputRef = useRef(null)
+    const [phoneId, setPhoneId] = useState("")
 
 
 
@@ -82,11 +83,9 @@ const InputFieldOTP = ({ code, setCode, setPinReady, maxLength, navigation, data
             "deviceId": phoneId
         }
 
-        console.log(body)
 
         try {
             const data = await axios.post(url, body, options)
-            console.log(data.data)
 
             const { message, response, responseCode, transactionStatus } = data.data
             Alert.alert(`${message}`)
@@ -97,9 +96,9 @@ const InputFieldOTP = ({ code, setCode, setPinReady, maxLength, navigation, data
                 navigation.navigate("Completed", { data: response, summaryData })
                 setModalVisible(false)
                 setIsLoading(false)
-                console.log(response, "from success")
             } else {
                 Alert.alert(`${transactionStatus}`, `${message}`)
+                navigation.navigate("Home")
                 setModalVisible(false)
                 setIsLoading(false)
             }

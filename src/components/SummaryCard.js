@@ -11,6 +11,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 
 const SummaryCard = ({ data }) => {
+    console.log(data, "here")
     // const fullName = data.tranRes.name; // "OTOKINA GREATNESS OMOKHAFE"
 
     // const names = fullName.split(" "); // Split the full name by spaces
@@ -41,7 +42,7 @@ const SummaryCard = ({ data }) => {
             <View style={[styles.container, styles.boxShadow]}>
 
                 <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(10) }}>
-                    <Text style={{ fontSize: s(14), fontWeight: "600", paddingBottom: s(3), color: color.colorSix }}>{data.tranRes.name}</Text>
+                    <Text style={{ fontSize: s(14), fontWeight: "600", paddingBottom: s(3), color: color.colorSix }}>{data.tranRes.name} </Text>
                     <Text style={{ fontSize: s(12), fontWeight: "400", color: color.colorFive }}>{data.tranRes.account}</Text>
                 </View>
                 <View style={{ marginTop: s(18) }}>

@@ -91,11 +91,15 @@ const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data,
             "deviceId": phoneId,
         }
 
+        console.log(body, "request body")
+
 
         try {
             const data = await axios.post(url, body, options)
+            console.log(data, "full response")
 
             const { message, response, responseCode, transactionStatus } = data.data
+            console.log(response, "my response")
             setModalVisible(false)
 
             if (responseCode === "00") {

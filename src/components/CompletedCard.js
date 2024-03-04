@@ -17,7 +17,7 @@ import "intl/locale-data/jsonp/en";
 
 
 const CompletedCard = ({ data, navigation }) => {
-    console.log(data, "completed")
+    console.log(data.summaryData.tranRes.account_name, "completed")
     const [showShareButton, setShowShareButton] = useState(true);
     const ref = useRef();
 
@@ -55,20 +55,20 @@ const CompletedCard = ({ data, navigation }) => {
             <ViewShot ref={ref} >
                 <View style={styles.container}>
                     <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(10) }}>
-                        <Text style={{ fontSize: s(13), fontWeight: "600", paddingBottom: 5, color: color.colorSix }}>{data.data.name || data.data.beneficiaryAccountName}</Text>
-                        <Text style={{ fontSize: 16, fontWeight: "400", color: color.colorFive }}>{data.data.account || data.data.beneficiaryAccountNumber}</Text>
+                        <Text style={{ fontSize: s(13), fontWeight: "600", paddingBottom: 5, color: color.colorSix }}>{data.data.name || data.data.beneficiaryAccountName || data.summaryData.tranRes.account_name}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: "400", color: color.colorFive }}>{data.data.account || data.data.beneficiaryAccountNumber || data.summaryData.tranRes.account_number}</Text>
                     </View>
                     <View style={{ marginTop: s(20) }}>
                         {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
                         <Text style={{ fontSize: 15, fontWeight: "400", color: color.colorFour }}>RRN</Text>
                         <Text style={{ fontSize: 18, fontWeight: "600", color: color.colorThree }}>{data.RN}</Text>
-                    </View> */}
+                    </View> */} 
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: s(15) }}>
                             <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Bank</Text>
                             <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{data.summaryData.res.banks}</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: s(15) }}>
-                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Bank</Text>
+                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Narration</Text>
                             <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{data.summaryData.res.narration}</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>

@@ -151,8 +151,10 @@ const Validate = ({ navigation }) => {
         try {
             setIsLoading(true)
             const data = await axios.post(url, body, options)
+            console.log(data, "all data")
 
             const { message, response, status } = data.data
+            console.log(response, "my response")
             setIsLoading(false)
             setBanks(response.bankCodes)
         } catch (error) {

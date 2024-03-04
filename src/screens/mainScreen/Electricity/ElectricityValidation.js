@@ -285,7 +285,7 @@ const ElectricityValidation = ({ navigation, route }) => {
                                         />
                                     </View>
                                 </View>
-                                {accountName && <AppButton title="Confirm Transfer" style={{ width: "90%" }} onPress={handleSubmit} />}
+                                {accountName && <AppButton title="Confirm Transaction" style={{ width: "90%" }} onPress={handleSubmit} />}
                             </>
                         );
 

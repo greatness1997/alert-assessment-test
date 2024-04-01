@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LandingOne from '../AuthScreen/Landing/LandingOne';
 import LandingStack from './stacks/LandingStack';
 import PersistLogin from '../AuthScreen/PersistLogin';
+import TabNavigator2 from './TabNavigator2';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -43,9 +44,9 @@ const AppNavigator = () => {
             <Stack.Screen name="login" component={AuthSatck} />
             <Stack.Screen name="PersistLogin" component={PersistLogin} />
             <Stack.Screen name="Home" component={TabNavigator} />
+            <Stack.Screen name="SpendWiseHome" component={TabNavigator2} />
         </Stack.Navigator>
-
-    )
+)
 }
 
 const styles = StyleSheet.create({

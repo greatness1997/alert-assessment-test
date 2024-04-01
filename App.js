@@ -45,11 +45,8 @@ const app = () => {
 
   return (
     <>
-    {/* <OfflineNotice /> */}
     <View style={styles.container}>
-      {/* <SafeAreaView> */}
       <StatusBar barStyle={Platform.select({ android: 'light-content', ios: 'light-content' })} />
-      {/* </SafeAreaView> */}
       <NavigationContainer>
         <AppNavigator />
       </NavigationContainer>

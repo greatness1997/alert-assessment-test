@@ -91,4 +91,29 @@ export const fullAmala =  require('../assets/fullAmala.png')
 export const cryspy =  require('../assets/cryspy.png')
 export const grilled =  require('../assets/grilled.png')
 
+export const black =  require('../assets/black.png')
+export const green =  require('../assets/green.png')
+export const orange =  require('../assets/orange.png')
+export const internet =  require('../assets/internet.png')
+export const light =  require('../assets/light.png')
+export const transfe =  require('../assets/transfe.png')
+
+export const home =  require('../assets/tabs/home.png')
+export const bel =  require('../assets/tabs/bell.png')
+export const accounts =  require('../assets/tabs/acounts.png')
+export const reports =  require('../assets/tabs/reports.png')
+export const settings =  require('../assets/tabs/settings.png')
+
+export const spout =  require('../assets/spout.png')
+export const visa =  require('../assets/visa.png')
+export const master =  require('../assets/master.png')
+
+export const amazon =  require('../assets/amazon-icon.png')
+export const car =  require('../assets/car-icon.png')
+export const church =  require('../assets/church-icon.png')
+export const education =  require('../assets/education-icon.png')
+export const flight =  require('../assets/flight-icon.png')
+export const food =  require('../assets/icon-food.png')
+
+
 

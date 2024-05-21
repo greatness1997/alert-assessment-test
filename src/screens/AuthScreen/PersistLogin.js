@@ -51,7 +51,6 @@ const PersistLogin = ({ navigation, route }) => {
     });
 
     const Login = async (res) => {
-
         const url = `${cred.URL}/auth/get-token`
         const body = {
             login: res.login,
@@ -75,7 +74,7 @@ const PersistLogin = ({ navigation, route }) => {
                 setIsLoadking(false)
             }
         } catch (error) {
-            console.log(error.response.data, 'from catch')
+            console.log(error, 'from catch')
             const { message } = error.response.data
             Alert.alert(`${message}`);
             setIsLoadking(false)

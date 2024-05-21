@@ -1,36 +1,46 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet } from 'react-native'
-import TabNavigator from './TabNavigator'
-import AuthSatck from './stacks/AuthStack';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ActivityIndicator, Platform } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
+import TabNavigator from './TabNavigator';
+import AuthStack from './stacks/AuthStack';
 import LandingOne from '../AuthScreen/Landing/LandingOne';
 import LandingStack from './stacks/LandingStack';
 import PersistLogin from '../AuthScreen/PersistLogin';
 import TabNavigator2 from './TabNavigator2';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-
-    const [data, setData] = useState({})
-
-    const getData = async () => {
-        try {
-            const userData = await AsyncStorage.getItem('userData');
-            const data = JSON.parse(userData)
-            if(userData){
-                setData(userData)
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    };
+    const [isLoading, setIsLoading] = useState(true); // Initially, loading is true
+    const { auth: { user } } = useSelector(state => state);
 
     useEffect(() => {
-        getData()
-    },[])
+        const getData = async () => {
+            try {
+                const userData = await AsyncStorage.getItem('userData');
+                if (userData) {
+                    // If user data exists, update the state and stop loading
+                    setIsLoading(false);
+                }else{
+                    setIsLoading(false)
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        getData(); // Fetch user data when component mounts
+    }, []);
+
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="white" />
+            </View>
+        );
+    }
 
     return (
         <Stack.Navigator
@@ -41,17 +51,14 @@ const AppNavigator = () => {
             })}
         >
             <Stack.Screen name="LandingOne" component={LandingStack} />
-            <Stack.Screen name="login" component={AuthSatck} />
+            <Stack.Screen name="login" component={AuthStack} />
             <Stack.Screen name="PersistLogin" component={PersistLogin} />
-            <Stack.Screen name="Home" component={TabNavigator} />
-            <Stack.Screen name="SpendWiseHome" component={TabNavigator2} />
+            {user.agentType === "agent" ? <Stack.Screen name="Home" component={TabNavigator} /> :
+            <Stack.Screen name="Home" component={TabNavigator2} />}
         </Stack.Navigator>
-)
-}
+    );
+};
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({});
 
-})
-
-export default AppNavigator
-
+export default AppNavigator;

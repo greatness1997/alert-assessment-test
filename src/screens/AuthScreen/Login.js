@@ -93,7 +93,6 @@ const Login = ({ navigation, route }) => {
             setIsLoadking(true)
             const response = await axios.post(url, body)
             const { status, message, userData, token } = response.data
-            console.log(token)
 
             if (status !== "success") {
                 showToast(message);
@@ -113,7 +112,7 @@ const Login = ({ navigation, route }) => {
 
 
         } catch (error) {
-            console.log(error.response.data, 'from catch')
+            console.log(error, 'from catch')
             const { message } = error.response.data
             showToast(message);
             setIsLoadking(false)

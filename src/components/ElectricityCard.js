@@ -15,6 +15,7 @@ import "intl/locale-data/jsonp/en";
 
 
 const ElectricityCard = ({ data, navigation }) => {
+    console.log(data, "from com")
     const [showShareButton, setShowShareButton] = useState(true);
 
     const date = moment().format('DD-MM-YYYY')
@@ -54,21 +55,21 @@ const ElectricityCard = ({ data, navigation }) => {
             <ViewShot ref={ref} >
                 <View style={styles.container}>
                     <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(5) }}>
-                        <Text style={{ fontSize: s(13), fontWeight: "600", paddingBottom: 5, color: color.colorSix }}>{data.data.name}</Text>
-                        <Text style={{ fontSize: 16, fontWeight: "400", color: color.colorFive }}>{data.data.account}</Text>
+                        <Text style={{ fontSize: s(13), fontWeight: "600", paddingBottom: 5, color: color.colorSix }}>{data.data.name || data.data.details.customername || ""}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: "400", color: color.colorFive }}>{data.data.account || data.data.details.account || ""}</Text>
                     </View>
                     <View style={{ marginTop: s(10) }}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
-                            <Text style={{ fontSize: 15, fontWeight: "400", color: color.colorFour }}>Token</Text>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: color.colorThree }}>{data.data.token}</Text>
+                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Token</Text>
+                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{data.data.token || data.data.details.creditToken.creditToken || ""}</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: s(15) }}>
                             <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Units</Text>
-                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{data.data.units}</Text>
+                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{data.data.details.creditToken.value || data.data.details.units || ""}</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
                             <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Amount</Text>
-                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{`₦${format.format(data.data.amount)}`}</Text>
+                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{`₦${format.format(data.data.amount || data.data.details.amount)}`}</Text>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
                             <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Date</Text>

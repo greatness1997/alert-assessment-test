@@ -27,7 +27,6 @@ const ElectricityVerify = ({ navigation, data, value, setModalVisible }) => {
                     </View>
                 </View>
                 <View>
-
                     <ElectricityPin
                         code={code}
                         setCode={setCode}
@@ -38,9 +37,6 @@ const ElectricityVerify = ({ navigation, data, value, setModalVisible }) => {
                         value={value}
                         setModalVisible={setModalVisible}
                     />
-
-
-
                 </View>
             {/* </Pressable> */}
         </View>
@@ -54,7 +50,8 @@ const styles = StyleSheet.create({
     },
     text2: {
         fontSize: s(14),
-        fontWeight: "500"
+        fontWeight: "500",
+        color: "black"
     },
 
     text1: {

@@ -175,7 +175,7 @@ const HistoryReceipt = ({ navigation, route }) => {
                                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: s(12) }}>
                                         <Text style={{ color: "#aaaaaa" }}>Token</Text>
                                         <Text style={{ color: "#626562", flex: 1, marginLeft: s(10), }} numberOfLines={3} ellipsizeMode="tail">
-                                            {item.status === "successful" ? item.response.token : null}
+                                            {item.status === "successful" ? item.response.token || item.response.details.creditToken.creditToken : null}
                                         </Text>
                                     </View>) : cabletv.includes(item.product) ? (
                                         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: s(12) }}>
@@ -195,7 +195,7 @@ const HistoryReceipt = ({ navigation, route }) => {
                             {electricity.includes(item.product) && (<View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: s(12) }}>
                                 <Text style={{ color: "#aaaaaa" }}>Units</Text>
                                 <Text style={{ color: "#626562", flex: 1, marginLeft: s(10), }} numberOfLines={3} ellipsizeMode="tail">
-                                    {item.status === "successful" ? item.response.units : null}
+                                    {item.status === "successful" ? item.response.units || item.response.details.creditToken.value : null}
                                 </Text>
                             </View>
                             )}
@@ -214,7 +214,7 @@ const HistoryReceipt = ({ navigation, route }) => {
                 </ViewShot>
             </View>
 
-            <View style={{ flexDirection: "row", justifyContent: 'space-between', padding: s(25), marginBottom: s(10), position: "absolute", top: "80%", marginLeft: "5%" }}>
+            <View style={{ flexDirection: "row", justifyContent: 'space-between', padding: s(25), marginBottom: s(10), position: "absolute", top: "85%", marginLeft: "5%" }}>
                 <TouchableOpacity onPress={() => { setShowShareButton(false), shareImage() }} style={styles.print}>
                     <Text style={{ fontSize: s(12), fontWeight: "bold", color: "#1b2d56" }}>Share</Text>
                 </TouchableOpacity>

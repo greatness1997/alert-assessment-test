@@ -12,6 +12,8 @@ import LoadingScreen from '../../../components/Loading'
 
 import Geolocation from '@react-native-community/geolocation';
 
+import { useToast } from "react-native-toast-notifications";
+
 
 const AirtimeOTP = ({ code, setCode, setPinReady, maxLength, navigation, data, secureTextEntry, setModalVisible }) => {
     const [isContFocus, setIsConFocus] = useState(false)
@@ -95,6 +97,19 @@ const AirtimeOTP = ({ code, setCode, setPinReady, maxLength, navigation, data, s
         return `${p}-${n}`;
     };
 
+
+    const toast = useToast()
+
+    const handleErrorNotification = (message) =>
+        toast.show("failed", {
+            type: 'custom_error_toast',
+            animationDuration: 150,
+            message,
+            data: {
+
+            },
+        });
+
     const makeTransfer = async () => {
         setIsLoading(true)
         const url = `${cred.URL}/vas/airtime/purchase`
@@ -116,25 +131,20 @@ const AirtimeOTP = ({ code, setCode, setPinReady, maxLength, navigation, data, s
         try {
             const data = await axios.post(url, body, options)
 
-            const { message, response, responseCode, transactionStatus } = data.data
-            setModalVisible(false)
-
+            const { response, responseCode } = data.data
             if (responseCode === "00") {
-                setModalVisible(false)
+                navigation.navigate("AirtimeCompleted", { data: response })
                 setIsLoading(false)
-                navigation.navigate("AirtimeCompleted", { data: response, message: message })
-
-            } else {
-                Alert.alert(`${transactionStatus}`, `${message}`)
                 setModalVisible(false)
-                setIsLoading(false)
+                
             }
 
         } catch (error) {
             setModalVisible(false)
             setIsLoading(false)
             const { message } = error.response.data
-            Alert.alert(`${message}`)
+            handleErrorNotification(message)
+
         }
     }
 

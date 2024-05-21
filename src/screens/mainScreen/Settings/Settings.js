@@ -3,6 +3,7 @@ import { StyleSheet, Alert, Switch, Text, View, TouchableWithoutFeedback, Image,
 import { airtel, mtn, glo, eclipse, password, changepin, biometrics, logout, help } from '../../../constants/images'
 import AppButton from '../../../components/AppButtonBlue'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { s } from 'react-native-size-matters'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -97,6 +98,25 @@ const Settings = ({ navigation }) => {
         getBiometricSetting();
     }, []);
 
+    const showAlert = () => {
+        Alert.alert(
+            'Disable Account',
+            'Are you sure you want to disable your account?',
+            [
+                {
+                    text: 'Cancel',
+                    // onPress: () => console.log('OK Pressed'),
+                },
+                {
+                    text: 'Continue',
+                    // onPress: () => console.log('OK Pressed'),
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
+
 
     // const authenticate = () => {
     //     TouchID.authenticate('To login to your account')
@@ -137,7 +157,7 @@ const Settings = ({ navigation }) => {
                 <View style={{ height: 1, backgroundColor: "lightgrey", width: "80%", marginLeft: s(30) }}></View> */}
 
                 <TouchableOpacity onPress={() => navigation.navigate('Help')} style={styles.serviceContainer}>
-                <ImageBackground
+                    <ImageBackground
                         source={eclipse}
                         style={{ width: s(35), height: s(35), justifyContent: "center", alignItems: "center" }}
                     >
@@ -180,7 +200,7 @@ const Settings = ({ navigation }) => {
                 </TouchableOpacity>
                 <View style={{ height: 1, backgroundColor: "lightgrey", width: "80%", marginLeft: s(30) }}></View>
                 <View style={styles.serviceContainer}>
-                <ImageBackground
+                    <ImageBackground
                         source={eclipse}
                         style={{ width: s(35), height: s(35), justifyContent: "center", alignItems: "center" }}
                     >
@@ -199,8 +219,21 @@ const Settings = ({ navigation }) => {
 
                 </View>
                 <View style={{ height: 1, backgroundColor: "lightgrey", width: "80%", marginLeft: s(30) }}></View>
+                <TouchableOpacity style={styles.serviceContainer} onPress={() => showAlert()}>
+                    <ImageBackground
+                        source={eclipse}
+                        style={{ width: s(35), height: s(35), justifyContent: "center", alignItems: "center" }}
+                    >
+                       <MaterialIcons name="person-add-disabled" size={s(18)} color="#292827" />
+                    </ImageBackground>
+                    <View>
+                        <Text style={{ fontWeight: "500", marginLeft: 20, color: "black" }}>Disable Account</Text>
+                    </View>
+
+                </TouchableOpacity>
+                <View style={{ height: 1, backgroundColor: "lightgrey", width: "80%", marginLeft: s(30) }}></View>
                 <TouchableOpacity style={styles.serviceContainer} onPress={() => removeValue()}>
-                <ImageBackground
+                    <ImageBackground
                         source={eclipse}
                         style={{ width: s(35), height: s(35), justifyContent: "center", alignItems: "center" }}
                     >

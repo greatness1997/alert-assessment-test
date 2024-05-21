@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react"
-import { View, Text, Image, ScrollView, Dimensions, StyleSheet, ImageBackground, TouchableOpacity } from "react-native"
+import React, { useRef, useState, useEffect } from "react"
+import { View, Text, Image, FlatList, ScrollView, Dimensions, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native"
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from "react-native-vector-icons/FontAwesome"
@@ -7,8 +7,19 @@ import SimpleLine from 'react-native-vector-icons/SimpleLineIcons';
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import { amazon, car, church, food, education, flight } from "../../../constants/images";
 
+import { useSelector } from 'react-redux'
+import cred from '../../../config'
+import axios from 'axios'
+import "intl"
+import "intl/locale-data/jsonp/en";
+
+import { useToast } from "react-native-toast-notifications";
+import { useCameraRoll } from "@react-native-camera-roll/camera-roll";
+
 
 const Reminder = ({ navigation }) => {
+
+    const toast = useToast()
 
     const scrollViewRef = useRef();
     const windowWidth = Dimensions.get('window').width;
@@ -16,10 +27,148 @@ const Reminder = ({ navigation }) => {
 
 
     const [selectedOption, setSelectedOption] = useState('Reminder');
+    const [categories, setCategories] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [categoryLoading, setCategoryLoading] = useState({});
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
     };
+
+
+
+    const { auth: { user } } = useSelector(state => state)
+    console.log(user)
+
+    const handleErrorNotification = (message) =>
+        toast.show('Failed', {
+            type: 'custom_error_toast',
+            animationDuration: 150,
+            message,
+            data: {
+                // title: 'Login Failed',
+            },
+        });
+
+    const handleSuccessNotification = (message) =>
+        toast.show('Category Retrieved', {
+            type: 'custom_success_toast',
+            animationDuration: 150,
+            data: {
+                // title: 'Login Failed',
+            },
+        });
+
+
+    const getCategories = async () => {
+        setIsLoading(true)
+        const url = `${cred.URL}/get/categories`
+        const options = { headers: { Authorization: `Bearer ${user.token}` } }
+
+        try {
+
+            const res = await axios.get(url, options)
+
+            const { message, data, status } = res.data
+            setCategories(data)
+            // handleSuccessNotification()
+        } catch (error) {
+            setIsLoading(false)
+            const { message } = error.response.data
+            handleErrorNotification(message)
+
+        } finally {
+            setIsLoading(false)
+        }
+
+    }
+
+
+    const updateCategoryStatus = async (id) => {
+        setCategoryLoading((prevState) => ({
+            ...prevState,
+            [id]: true,
+        }));
+        const url = `${cred.URL}/update/category/status/${id}`;
+        const options = { headers: { Authorization: `Bearer ${user.token}` } };
+    
+        try {
+            const res = await axios.put(url, options);
+            const { status, message } = res.data;
+            handleSuccessNotification(message);
+            getCategories()
+        } catch (error) {
+            console.log(error.response.data)
+            setCategoryLoading((prevState) => ({
+                ...prevState,
+                [id]: false,
+            }));
+            const { message } = error.response.data
+            handleErrorNotification(message)
+
+        } finally {
+            setCategoryLoading((prevState) => ({
+                ...prevState,
+                [id]: false,
+            }));
+        }
+
+    }
+    
+
+    useEffect(() => {
+        getCategories()
+
+    }, [])
+
+
+    const renderItem = ({ item }) => {
+
+        const categoryName = item.name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        const beneficiary = item.beneficiary.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+        const date = new Date(item.occurs);
+
+        const formattedDate = date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        return (
+            <View style={{ padding: s(5) }}>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                    <View>
+                        <View style={{ flexDirection: "row" }}>
+                            <Image source={food} style={{ resizeMode: "contain", width: s(20), height: s(20), marginRight: s(5) }} />
+                            <Text style={{ color: "#000000", fontWeight: "bold", fontSize: s(13) }}>{categoryName}</Text>
+                        </View>
+                        <Text style={{ color: "#000000", fontWeight: "400", fontSize: s(10), marginTop: s(2) }}>{formattedDate} | {item.accountNo}</Text>
+                    </View>
+
+                    <TouchableOpacity onPress={() => updateCategoryStatus(item._id)} style={{ width: s(70), height: s(30), borderColor: "#1C913C", backgroundColor: item.status === "pay" && "#1C913C", borderWidth: 1, justifyContent: "center", alignItems: "center", borderRadius: s(20) }}>
+                        {categoryLoading[item._id] ? (
+                            <ActivityIndicator size="small" color= "lightgray" />
+                        ) : (
+                            <Text style={{ color: item.status === "pay" ? "white" : "#1C913C", fontSize: s(11), fontWeight: "600" }}>{item.status.toUpperCase()}</Text>
+                        )}
+                    </TouchableOpacity>
+
+
+                </View>
+                <View style={{ backgroundColor: "gray", height: s(0.4), marginTop: s(8) }}></View>
+            </View>
+        );
+    };
+
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
+    }
+
 
 
     return (
@@ -46,7 +195,15 @@ const Reminder = ({ navigation }) => {
 
                 {selectedOption === "Reminder" && (<View style={{ padding: s(20) }}>
                     <View style={{ padding: s(5) }}>
-                        <View style={{ padding: s(5) }}>
+
+                        <FlatList
+                            data={categories}
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item, index) => item._id}
+                            renderItem={renderItem}
+                        />
+
+                        {/* <View style={{ padding: s(5) }}>
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                 <View>
                                     <View style={{ flexDirection: "row" }}>
@@ -62,9 +219,9 @@ const Reminder = ({ navigation }) => {
 
                             </View>
                             <View style={{ backgroundColor: "gray", height: s(0.4), marginTop: s(8) }}></View>
-                        </View>
+                        </View> */}
 
-                        <View style={{ padding: s(5) }}>
+                        {/* <View style={{ padding: s(5) }}>
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                 <View>
                                     <View style={{ flexDirection: "row" }}>
@@ -80,9 +237,9 @@ const Reminder = ({ navigation }) => {
 
                             </View>
                             <View style={{ backgroundColor: "gray", height: s(0.4), marginTop: s(8) }}></View>
-                        </View>
+                        </View> */}
 
-                        <View style={{ padding: s(5) }}>
+                        {/* <View style={{ padding: s(5) }}>
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                 <View>
                                     <View style={{ flexDirection: "row" }}>
@@ -98,9 +255,9 @@ const Reminder = ({ navigation }) => {
 
                             </View>
                             <View style={{ backgroundColor: "gray", height: s(0.4), marginTop: s(8) }}></View>
-                        </View>
+                        </View> */}
 
-                        <View style={{ padding: s(5) }}>
+                        {/* <View style={{ padding: s(5) }}>
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                 <View>
                                     <View style={{ flexDirection: "row" }}>
@@ -116,9 +273,9 @@ const Reminder = ({ navigation }) => {
 
                             </View>
                             <View style={{ backgroundColor: "gray", height: s(0.4), marginTop: s(8) }}></View>
-                        </View>
+                        </View> */}
 
-                        <View style={{ padding: s(5) }}>
+                        {/* <View style={{ padding: s(5) }}>
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                                 <View>
                                     <View style={{ flexDirection: "row" }}>
@@ -134,7 +291,7 @@ const Reminder = ({ navigation }) => {
 
                             </View>
                             <View style={{ backgroundColor: "gray", height: s(0.4), marginTop: s(8) }}></View>
-                        </View>
+                        </View> */}
                     </View>
                 </View>)}
 
@@ -165,7 +322,7 @@ const Reminder = ({ navigation }) => {
                         </View>
                     </View>
 
-                    
+
                     <TouchableOpacity onPress={() => navigation.navigate("AddCategory")}
                         style={{
                             width: s(50),

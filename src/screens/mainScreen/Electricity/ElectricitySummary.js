@@ -117,7 +117,7 @@ const ElectricitySummary = ({ navigation, route }) => {
                     <View style={styles.transparentContainer}></View>
                     <View style={styles.contentContainer}>
                         <TouchableOpacity style={styles.iconCont} onPress={() => setModalVisible(false)}>
-                            <MaterialCommunityIcons name="close-circle" size={30} />
+                            <MaterialCommunityIcons name="close-circle" size={30} color="black" />
                         </TouchableOpacity>
                         <ElectricityVerify data={data} value={value} navigation={navigation} setModalVisible={setModalVisible} />
                     </View>

@@ -1,17 +1,13 @@
 import React, { useState, useRef } from 'react'
 import { Modal, Image, SafeAreaView, View, StyleSheet, Text, Alert, TextInput, TouchableOpacity } from 'react-native'
 
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+
 
 import { Complete } from '../../../constants/animation';
 import Lottie from "lottie-react-native"
 
 
 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import CompletedCard from '../../../components/CompletedCard';
-import AppButton from '../../../components/AppButtonBlue';
 import { color } from '../../../constants/color';
 import { s } from 'react-native-size-matters'
 
@@ -66,12 +62,8 @@ const DataCompleted = ({ navigation, route, setModalVisible }) => {
 
     return (
 
-        <View style={{ flex: 1, marginTop: s(45), marginLeft: s(15), width: "90%" }}>
-
-
-
-            <View style={{ marginBottom: s(20), marginTop: 0, alignItems: "center" }}>
-
+       <View style={{ flex: 1, marginTop: s(100), marginLeft: s(15), width: "90%" }}>
+            <View style={{  alignItems: "center" , justifyContent: "center"}}>
                 <Lottie
                     source={Complete}
                     autoPlay
@@ -79,63 +71,15 @@ const DataCompleted = ({ navigation, route, setModalVisible }) => {
                     style={styles.animation}
                 />
 
-                <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(10) }}>
-                    <Text style={{ fontSize: s(13), fontWeight: "600", color: "green" }}>Transfer Completed</Text>
+                <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(10), width: "85%",  }}>
+                    <Text style={{ fontSize: s(13), fontWeight: "600", color: "black",marginTop: s(20) }}>Transaction Completed</Text>
+                    <Text style={{ fontSize: s(14), fontWeight: "400", color: "black", marginTop: s(5), textAlign: "center" }}>You have successfully Purchased Airtime {`₦${format.format(data.data.amount)}`} to {data.data.account}</Text>
                 </View>
             </View>
 
-            {/* summary container */}
-            <ViewShot ref={ref} >
-                <View style={styles.container}>
-                    <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(20) }}>
-                        {/* <Text style={{ fontSize: s(13), fontWeight: "600", paddingBottom: 5, color: color.colorSix }}>{data.data.name}</Text> */}
-                        <Text style={{ fontSize: 16, fontWeight: "400", color: color.colorFive }}>{data.data.account}</Text>
-                    </View>
-                    <View style={{ marginTop: s(20) }}>
-                        {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
-                        <Text style={{ fontSize: 15, fontWeight: "400", color: color.colorFour }}>RRN</Text>
-                        <Text style={{ fontSize: 18, fontWeight: "600", color: color.colorThree }}>{data.RN}</Text>
-                    </View> */}
-                        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
-                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Status</Text>
-                            <Text style={{ fontSize: s(14), fontWeight: "600", color: "green" }}>{data.data.messsage}</Text>
-                        </View>
-                        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
-                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Amount</Text>
-                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{`₦${format.format(data.data.amount)}`}</Text>
-                        </View>
-                        {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
-                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Reference</Text>
-                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{data.data.reference}</Text>
-                        </View> */}
-                        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
-                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Date</Text>
-                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{date}</Text>
-                        </View>
-                        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
-                            <Text style={{ fontSize: s(13), fontWeight: "400", color: color.colorFour }}>Time</Text>
-                            <Text style={{ fontSize: s(14), fontWeight: "600", color: color.colorThree }}>{time}</Text>
-                        </View>
-                    </View>
-                    <Image source={LogoBlue} style={{ marginTop: 15, alignSelf: "center" }} />
-                </View>
-            </ViewShot>
-            {/* <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <TouchableOpacity style={styles.print} onPress={() => { setShowShareButton(false), shareImage() }}>
-                    <Image source={Print} style={{ width: s(15), height: s(15) }} />
-                </TouchableOpacity>
-                <Text style={{ color: color.colorSeven, fontSize: s(11), fontWeight: "500" }}>Print Receipt</Text>
-            </View> */}
-            {/* <AppButton title="Done" style={styles.botton} onPress={() => navigation.navigate("Home")} /> */}
-            <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: s(30) }}>
-                <TouchableOpacity onPress={() => { setShowShareButton(false), shareImage() }} style={styles.print}>
-                    <Text style={{ fontSize: s(12), fontWeight: "bold", color: "#1b2d56" }}>Share Receipt</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.done}>
-                    <Text style={{ fontSize: s(12), fontWeight: "bold", color: "#ffffff" }}>Done</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.done}>
+                <Text style={{ fontSize: s(12), fontWeight: "bold", color: "#ffffff" }}>Done</Text>
+            </TouchableOpacity>
 
         </View>
     )
@@ -150,8 +94,8 @@ const styles = StyleSheet.create({
     },
     animation: {
         position: "relative",
-        width: 60,
-        height: 60,
+        width: s(150),
+        height: s(150),
         backgrounColor: "green",
     },
     container: {
@@ -187,13 +131,14 @@ const styles = StyleSheet.create({
     },
     done: {
         backgroundColor: "#1b2d56", 
-        width: "45%", 
+        width: "100%", 
         padding: s(15), 
         justifyContent: "center", 
         alignItems: "center",
         borderRadius: s(50),
         borderWidth: s(1),
-        borderColor: '#1b2d56'
+        borderColor: '#1b2d56',
+        marginTop: s(20)
     }
 })
 

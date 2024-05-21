@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Modal } from 'react-native'
+import { View, Text, StyleSheet, Modal, ActivityIndicator } from 'react-native'
 import Lottie from 'lottie-react-native'
 import { Loading } from '../constants/animation'
 import { s } from 'react-native-size-matters'
@@ -15,12 +15,7 @@ const LoadingScreen = () => {
                 <View style={styles.transparentContainer}></View>
                 <View style={styles.contentContainer}>
                     <View style={styles.notice}>
-                        <Lottie
-                            source={Loading}
-                            autoPlay
-                            loop
-                            style={styles.animation}
-                        />
+                       <ActivityIndicator size="large" color="white" />
                     </View>
                 </View>
             </View>

@@ -14,6 +14,8 @@ import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import KeyboardAvoidingViewNB from '../../../components/KeyboardAvoidingView'
 import Geolocation from '@react-native-community/geolocation';
 
+import { useToast } from "react-native-toast-notifications";
+
 
 
 const AirtimeData = ({ navigation, route }) => {
@@ -40,6 +42,18 @@ const AirtimeData = ({ navigation, route }) => {
 
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
+
+    const toast = useToast()
+
+    const handleErrorNotification = (message) =>
+        toast.show("failed", {
+            type: 'custom_error_toast',
+            animationDuration: 150,
+            message,
+            data: {
+                
+            },
+        });
     
 
     const position = () => {
@@ -113,17 +127,18 @@ const AirtimeData = ({ navigation, route }) => {
         try {
             const data = await axios.post(url, body, options)
             const { response, transactionId } = data.data
-            console.log(response)
             setTranId(transactionId)
             setDataPlan(response.data)
             setIsLoading(false)
 
         } catch (error) {
             const { message } = error.response.data
-            Alert.alert(`${message}`)
+            handleErrorNotification(message)
             setIsLoading(false)
         }
     }
+
+   
 
 
     return (
@@ -158,7 +173,9 @@ const AirtimeData = ({ navigation, route }) => {
                                 .then((res) => {
                                     navigation.navigate("AirtimeSummary", { data: res, networkName: networkValue.name ? networkValue.name : "mtn", networkImage: networkValue.image ? networkValue.image : mtn })
                                 })
-                                .catch((err) => Alert.alert('Please provide proper details',));
+                                .catch((err) => {
+                                    handleErrorNotification("Provide Proper details")
+                                });
                         }}>
                         {(props) => {
                             const { handleChange, values, handleSubmit } = props;
@@ -254,7 +271,9 @@ const AirtimeData = ({ navigation, route }) => {
                             .then((res) => {
                                 navigation.navigate("DataSummary", { plan: plan.allowance, data: res, networkName: networkValue.name ? networkValue.name : "mtn", itemCode: itemCode, tranId: tranId, amount: amnt, networkImage: networkValue.image ? networkValue.image : mtn })
                             })
-                            .catch((err) => Alert.alert('Please provide proper details',));
+                            .catch((err) => {
+                                handleErrorNotification("Provide Proper details")
+                            });
                     }}>
                     {(props) => {
                         const { handleChange, values, handleSubmit } = props;
@@ -344,7 +363,7 @@ const AirtimeData = ({ navigation, route }) => {
                                                 return (
                                                     <TouchableOpacity style={{ marginBottom: s(13) }} key={key} onPress={() => thePlan(item.allowance, item.amount, item.validity, item.code)}>
                                                         <View style={{ flexDirection: "row", justifyContent: "space-between", padding: s(8) }}>
-                                                            <View style={{ flexDirection: "row" }}>
+                                                            <View style={{ flexDirection: "row",width: s(100) }}>
                                                                 {item.allowance ? <Text style={{ marginRight: 5, color: "grey" }}>{item.allowance}</Text> : <Text style={{ marginRight: 5, color: "grey" }}>{item.description}</Text>}
                                                                 {item.allowance ? <Text style={{ color: "grey" }}>for</Text> : null}
                                                                 {item.allowance ? <Text style={{ marginLeft: 5, color: "grey" }}>{`₦${item.amount}`}</Text> : null }

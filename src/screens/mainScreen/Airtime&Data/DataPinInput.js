@@ -9,6 +9,8 @@ import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import LoadingScreen from '../../../components/Loading'
 import DeviceInfo from 'react-native-device-info';
 
+import { useToast } from "react-native-toast-notifications";
+
 
 
 const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data, setModalVisible }) => {
@@ -16,6 +18,18 @@ const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data,
     const [phoneId, setPhoneId] = useState("")
     const [loading, setIsLoading] = useState(false)
     const inputRef = useRef(null)
+
+    const toast = useToast()
+
+    const handleErrorNotification = (message) =>
+        toast.show("failed", {
+            type: 'custom_error_toast',
+            animationDuration: 150,
+            message,
+            data: {
+
+            },
+        });
 
     useEffect(() => {
         const fetchDeviceInformation = async () => {
@@ -60,9 +74,9 @@ const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data,
             dataPayment()
             setCode('')
         }
-
-
     }, [code])
+
+    
 
     const { auth: { user } } = useSelector(state => state)
 
@@ -91,33 +105,21 @@ const DataPinInput = ({ code, setCode, setPinReady, maxLength, navigation, data,
             "deviceId": phoneId,
         }
 
-        console.log(body, "request body")
-
-
         try {
             const data = await axios.post(url, body, options)
-            console.log(data, "full response")
 
-            const { message, response, responseCode, transactionStatus } = data.data
-            console.log(response, "my response")
-            setModalVisible(false)
-
+            const { response, responseCode } = data.data
             if (responseCode === "00") {
                 navigation.navigate("DataCompleted", { data: response })
-                setModalVisible(false)
                 setIsLoading(false)
-
-            } else {
-                Alert.alert(`${transactionStatus}`, `${message}`)
                 setModalVisible(false)
-                setIsLoading(false)
             }
 
         } catch (error) {
             setModalVisible(false)
             setIsLoading(false)
             const { message } = error.response.data
-            Alert.alert(`${message}`)
+            handleErrorNotification(message)
         }
     }
 

@@ -13,6 +13,8 @@ import KeyboardAvoidView from '../../../components/KeyboardAvoidingView'
 
 import Geolocation from '@react-native-community/geolocation';
 
+import { useToast } from "react-native-toast-notifications";
+import LoadingScreen from '../../../components/Loading'
 
 
 
@@ -29,6 +31,29 @@ const ElectricityValidation = ({ navigation, route }) => {
     const [value, setValues] = useState({})
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
+    const [loading, setIsLoading] = useState(false)
+
+    const toast = useToast()
+
+    const handleErrorNotification = (message) =>
+        toast.show("failed", {
+            type: 'custom_error_toast',
+            animationDuration: 150,
+            message,
+            data: {
+                
+            },
+        });
+
+        const handleSuccessNotification = (message) =>
+            toast.show('success', {
+                type: 'custom_success_toast',
+                animationDuration: 150,
+                message,
+                data: {
+                    
+                },
+            });
 
     const position = () => {
         Geolocation.getCurrentPosition(
@@ -60,6 +85,7 @@ const ElectricityValidation = ({ navigation, route }) => {
 
 
     const electricityValidation = async (value, amount) => {
+        setIsLoading(true)
         const url = `${cred.URL}/vas/electricity/validation`
         const options = { headers: { Authorization: cred.API_KEY, Token: user.token } }
         const body = {
@@ -77,20 +103,23 @@ const ElectricityValidation = ({ navigation, route }) => {
 
             const data = await axios.post(url, body, options)
 
-            const { message, response, responseCode, transactionStatus } = data.data
-            console.log(data.data)
+            const { message, response, responseCode } = data.data
             if (responseCode === "00") {
                 setAccountName(response.name)
                 setResponseData(data.data)
+                setIsLoading(false)
+                handleSuccessNotification(response.name)
             } else {
                 setError("Meter Number unknown")
-                console.log(response)
+                handleErrorNotification("Meter Number unknown")
+                setIsLoading(false)
             }
 
         } catch (error) {
-            console.log(error.response.data)
             const { message } = error.response.data
             setError(`${message}`)
+            handleErrorNotification(message)
+            setIsLoading(false)
         }
     }
 
@@ -134,10 +163,11 @@ const ElectricityValidation = ({ navigation, route }) => {
                     onSubmit={(values) => {
                         Schema.validate(values)
                             .then((res) => {
-
                                 navigation.navigate("ElectricitySummary", { data: responseData, image: image, value: res });
                             })
-                            .catch((err) => Alert.alert('Please provide proper details',));
+                            .catch((err) => {
+                                handleErrorNotification("Provide Proper Details")
+                            });
                     }}>
                     {(props) => {
                         const { handleChange, values, handleSubmit } = props;
@@ -151,7 +181,7 @@ const ElectricityValidation = ({ navigation, route }) => {
 
                                 validationTimer = setTimeout(() => {
                                     electricityValidation(value, values.amount);
-                                }, 5000);
+                                }, 2000);
                             } else if (value.length === 13) {
                                 clearTimeout(validationTimer); // Clear the timer if 13 digits are entered
                                 electricityValidation(value, values.amount);
@@ -202,6 +232,7 @@ const ElectricityValidation = ({ navigation, route }) => {
                                         />
                                     </View>
                                 </View>
+                                {loading && <LoadingScreen />}
                                 {accountName && <AppButton title="Confirm Transfer" style={{ width: "90%" }} onPress={handleSubmit} />}
                             </>
                         );
@@ -226,10 +257,11 @@ const ElectricityValidation = ({ navigation, route }) => {
                     onSubmit={(values) => {
                         Schema.validate(values)
                             .then((res) => {
-
                                 navigation.navigate("ElectricitySummary", { data: responseData, image: image, value: res });
                             })
-                            .catch((err) => Alert.alert('Please provide proper details',));
+                            .catch((err) => {
+                                handleErrorNotification("Provide Proper Details")
+                            });
                     }}>
                     {(props) => {
                         const { handleChange, values, handleSubmit } = props;
@@ -285,6 +317,7 @@ const ElectricityValidation = ({ navigation, route }) => {
                                         />
                                     </View>
                                 </View>
+                                {loading && <LoadingScreen />}
                                 {accountName && <AppButton title="Confirm Transaction" style={{ width: "90%" }} onPress={handleSubmit} />}
                             </>
                         );

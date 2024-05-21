@@ -19,6 +19,9 @@ import codePush from "react-native-code-push";
 
 import { request, PERMISSIONS } from 'react-native-permissions';
 
+import {ToastProvider} from 'react-native-toast-notifications';
+import CustomToast from "./src/components/CustomToast";
+
 
 
 
@@ -26,7 +29,7 @@ import { request, PERMISSIONS } from 'react-native-permissions';
 
 const app = () => {
 
-   useEffect(() => {
+  useEffect(() => {
     const requestLocationPermission = async () => {
       try {
         const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
@@ -45,12 +48,37 @@ const app = () => {
 
   return (
     <>
-    <View style={styles.container}>
-      <StatusBar barStyle={Platform.select({ android: 'light-content', ios: 'light-content' })} />
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </View>
+      <View style={styles.container}>
+        <StatusBar barStyle={Platform.select({ android: 'light-content', ios: 'light-content' })} />
+        <NavigationContainer>
+          <ToastProvider
+            placement="top"
+            duration={5000}
+            animationType="slide-in"
+            animationDuration={250}
+            successColor="#028a0f"
+            dangerColor="#60100b"
+            warningColor="#e69b00"
+            normalColor="gray"
+            textStyle="white"
+            style={{ elevation: 10 }}
+            renderType={{
+              custom_toast: toast => <CustomToast toast={toast} />,
+              custom_error_toast: toast => (
+                <CustomToast toast={toast} variant="error" />
+              ),
+              custom_success_toast: toast => (
+                <CustomToast toast={toast} variant="success" />
+              ),
+              custom_attention_toast: toast => (
+                <CustomToast toast={toast} variant="warning" />
+              ),
+            }}
+            swipeEnabled={true}>
+            <AppNavigator />
+          </ToastProvider>
+        </NavigationContainer>
+      </View>
     </>
   )
 }

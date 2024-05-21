@@ -288,7 +288,7 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.product, styles.boxShadow]} onPress={() => navigation.navigate("SpendWiseHome")}>
+                            <TouchableOpacity onPress={() => {}} style={[styles.product, styles.boxShadow]}>
                                 <Image source={Others} style={{ width: s(30), height: s(40), marginTop: s(10) }} />
                                 <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: s(10) }}>
                                     <Text style={{ fontSize: s(12), color: "black" }}>Others</Text>

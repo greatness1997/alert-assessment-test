@@ -1,19 +1,15 @@
 import React, { useState } from 'react'
 import { Modal, SafeAreaView, View, StyleSheet, Text, Alert, TextInput, TouchableWithoutFeedback } from 'react-native'
 
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 
 import { Complete } from '../../../constants/animation';
 import Lottie from "lottie-react-native"
 
-
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ElectricityCard from '../../../components/ElectricityCard';
-import AppButton from '../../../components/AppButtonBlue';
 import { color } from '../../../constants/color';
-import {s} from 'react-native-size-matters'
+import { s } from 'react-native-size-matters'
+
+import "intl"
+import "intl/locale-data/jsonp/en";
 
 
 
@@ -21,18 +17,17 @@ import {s} from 'react-native-size-matters'
 const ElectricityCompleted = ({ navigation, route }) => {
 
     const completeData = route.params
-    console.log(completeData, "from completed")
 
+    const format = new Intl.NumberFormat("en-US", {
+        minimumIntegerDigits: 2,
+        maximumFractionDigits: 2
+    })
 
 
     return (
 
-        <View style={{ flex: 1, marginTop: s(40), marginLeft: s(15), width: "90%" }}>
-
-
-
-            <View style={{ marginBottom: s(20), marginTop: 5, alignItems: "center" }}>
-
+        <View style={{ flex: 1, marginTop: s(100), marginLeft: s(15), width: "90%" }}>
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
                 <Lottie
                     source={Complete}
                     autoPlay
@@ -40,20 +35,23 @@ const ElectricityCompleted = ({ navigation, route }) => {
                     style={styles.animation}
                 />
 
-                <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(10) }}>
-                    <Text style={{ fontSize: s(13), fontWeight: "600", color: "green" }}>Payment Completed</Text>
+                <View style={{ justifyContent: "center", alignItems: "center", marginTop: s(10), width: "85%", }}>
+                    <Text style={{ fontSize: s(13), fontWeight: "600", color: "black", marginTop: s(20) }}>Transaction Completed</Text>
+                    <Text style={{ fontSize: s(14), fontWeight: "400", color: "black", marginTop: s(5), textAlign: "center" }}>You have successfully Purchased {data.data.details.creditToken.value || data.data.details.units || ""} of electricity for {`₦${format.format(data.data.amount || data.data.details.amount)}`}</Text>
+                    <Text style={{ fontSize: s(14), fontWeight: "400", color: "black", marginTop: s(5), textAlign: "center" }}>{data.data.token || data.data.details.creditToken.creditToken || ""}</Text>
                 </View>
             </View>
 
-            <ElectricityCard data={completeData} navigation={navigation} />
-            {/* <AppButton title="Done" style={styles.botton} onPress={() => navigation.navigate("Home")} /> */}
+            <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.done}>
+                <Text style={{ fontSize: s(12), fontWeight: "bold", color: "#ffffff" }}>Done</Text>
+            </TouchableOpacity>
 
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-  
+
     botton: {
         backgroundColor: color.primary2,
         width: "100%",
@@ -61,9 +59,20 @@ const styles = StyleSheet.create({
     },
     animation: {
         position: "relative",
-        width: 60,
-        height: 60,
+        width: s(150),
+        height: s(150),
         backgrounColor: "green",
+    },
+    done: {
+        backgroundColor: "#1b2d56", 
+        width: "100%", 
+        padding: s(15), 
+        justifyContent: "center", 
+        alignItems: "center",
+        borderRadius: s(50),
+        borderWidth: s(1),
+        borderColor: '#1b2d56',
+        marginTop: s(20)
     }
 })
 

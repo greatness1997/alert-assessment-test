@@ -9,6 +9,7 @@ const activeTintColor = "black"
 
 import HomeStack from './stacks/SpendWise/HomeStack';
 import ReminderStack from './stacks/SpendWise/ReminderStack';
+import ReportStack from './stacks/SpendWise/ReportStack';
 
 
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
@@ -33,7 +34,7 @@ const TabNavigator2 = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="SpendWiseHome"
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarStyle: { backgroundColor: '#1B2D56', height: Platform.OS === "ios" ? 100 : 60 },
         tabBarActiveTintColor: 'white',
@@ -60,9 +61,9 @@ const TabNavigator2 = () => {
     >
       <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
       <Tab.Screen name="Reminder" component={ReminderStack} options={{ headerShown: false }} />
-      <Tab.Screen name="Reports" component={HomeStack} options={{ headerShown: false }} />
-      <Tab.Screen name="Accounts" component={HomeStack} options={{ headerShown: false }} />
-      <Tab.Screen name="Settings" component={HomeStack} options={{ headerShown: false }} />
+      <Tab.Screen name="Reports" component={ReportStack} options={{ headerShown: false }} />
+      {/* <Tab.Screen name="Accounts" component={HomeStack} options={{ headerShown: false }} />
+      <Tab.Screen name="Settings" component={HomeStack} options={{ headerShown: false }} /> */}
     </Tab.Navigator>
   );
 

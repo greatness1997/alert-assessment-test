@@ -118,7 +118,6 @@ const Validate = ({ navigation }) => {
 
         try {
             const data = await axios.post(url, body, options)
-            console.log(data.data)
 
             const { message, response, transactionId, responseCode } = data.data
            

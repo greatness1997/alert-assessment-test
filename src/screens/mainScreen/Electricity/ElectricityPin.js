@@ -10,6 +10,7 @@ import LoadingScreen from '../../../components/Loading'
 
 import DeviceInfo from 'react-native-device-info';
 
+import { useToast } from "react-native-toast-notifications";
 
 
 
@@ -18,6 +19,18 @@ const ElectricityPin = ({ code, setCode, setPinReady, maxLength, navigation, dat
     const [loading, setIsLoading] = useState(false)
     const [phoneId, setPhoneId] = useState("")
     const inputRef = useRef(null)
+
+    const toast = useToast()
+
+    const handleErrorNotification = (message) =>
+        toast.show("failed", {
+            type: 'custom_error_toast',
+            animationDuration: 150,
+            message,
+            data: {
+
+            },
+        });
 
 
     useEffect(() => {
@@ -94,25 +107,24 @@ const ElectricityPin = ({ code, setCode, setPinReady, maxLength, navigation, dat
         try {
             const data = await axios.post(url, body, options)
 
-            const { message, response, responseCode, transactionStatus } = data.data
-            setModalVisible(false)
+            const { response, responseCode, message } = data.data
 
             if (responseCode === "00") {
                 navigation.navigate("ElectricityComplete", { data: response })
-                setModalVisible(false)
                 setIsLoading(false)
-
-            } else {
-                Alert.alert(`${transactionStatus}`, `${message}`)
                 setModalVisible(false)
+            }else{
                 setIsLoading(false)
+                setModalVisible(false)
+                handleErrorNotification(message)
             }
+
 
         } catch (error) {
             setModalVisible(false)
             setIsLoading(false)
             const { message } = error.response.data
-            Alert.alert(`${message}`)
+            handleErrorNotification(message)
         }
     }
 
@@ -151,7 +163,7 @@ const styles = StyleSheet.create({
     },
     box: {
         borderWidth: 2,
-        borderColor: "grey",
+        borderColor: "black",
         width: s(45),
         height: s(50),
         padding: s(10),

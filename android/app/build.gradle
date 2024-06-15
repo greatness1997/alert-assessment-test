@@ -96,9 +96,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.spout.payment"
+    namespace "com.junedomingo.travelapp"
     defaultConfig {
-        applicationId "com.spout.payment"
+        applicationId "com.junedomingo.travelapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9

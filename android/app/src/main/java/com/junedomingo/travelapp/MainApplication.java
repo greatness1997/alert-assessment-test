@@ -1,4 +1,4 @@
-package com.spout.payment;
+package com.junedomingo.travelapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

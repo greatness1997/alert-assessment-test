@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Dimensions, View, SafeAreaView, StatusBar, StyleSheet, Modal, Text, ImageBackground, Image, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Alert, Platform } from 'react-native'
-import { image, swit, wallet, wall, backgroundImage, Logo, LogoBlue, Add, Send, Airtime, Data, Electricity, CableTv, Others, Insurance, inventory } from '../../constants/images'
+import { swit, wallet, wall, Logo, LogoBlue, Add, Send, Airtime, Data, Electricity, CableTv, Others, Insurance, inventory } from '../../constants/images'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux'
@@ -10,13 +10,12 @@ import "intl"
 import "intl/locale-data/jsonp/en";
 import Clipboard from '@react-native-clipboard/clipboard'
 import Share from "react-native-share"
-import ViewShot from 'react-native-view-shot';
-
 
 import { s, vs, ms, mvs, ScaledSheet } from 'react-native-size-matters';
 import Options from './AddMoney/Options';
 import AppButton from '../../components/AppButtonBlue';
 import DailyPerformance from '../../components/DailyPerformance';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -95,13 +94,20 @@ const HomeScreen = ({ navigation }) => {
         }
     }
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         getBalance()
+    //         getProfile()
+    //     }, 5000);
+    //     return () => clearInterval(intervalId);
+    // }, [])
+
+    useFocusEffect(
+        useCallback(() => {
             getBalance()
             getProfile()
-        }, 5000);
-        return () => clearInterval(intervalId);
-    }, [])
+        }, [])
+    );
 
     useEffect(() => {
         getBalance()
@@ -288,7 +294,7 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => {}} style={[styles.product, styles.boxShadow]}>
+                            <TouchableOpacity onPress={() => { }} style={[styles.product, styles.boxShadow]}>
                                 <Image source={Others} style={{ width: s(30), height: s(40), marginTop: s(10) }} />
                                 <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: s(10) }}>
                                     <Text style={{ fontSize: s(12), color: "black" }}>Others</Text>

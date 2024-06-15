@@ -53,8 +53,9 @@ const AppNavigator = () => {
             <Stack.Screen name="LandingOne" component={LandingStack} />
             <Stack.Screen name="login" component={AuthStack} />
             <Stack.Screen name="PersistLogin" component={PersistLogin} />
-            {user.agentType === "agent" ? <Stack.Screen name="Home" component={TabNavigator} /> :
-            <Stack.Screen name="Home" component={TabNavigator2} />}
+            <Stack.Screen name="Home" component={TabNavigator} /> 
+            {/* {user.agentType === "user" ? <Stack.Screen name="Home" component={TabNavigator} /> :
+            <Stack.Screen name="Home" component={TabNavigator2} />} */}
         </Stack.Navigator>
     );
 };

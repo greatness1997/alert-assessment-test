@@ -27,6 +27,7 @@ import CustomToast from "./src/components/CustomToast";
 
 
 
+
 const app = () => {
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const app = () => {
 
     requestLocationPermission();
   }, []);
+
 
   return (
     <>

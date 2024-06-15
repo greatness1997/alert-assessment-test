@@ -71,17 +71,19 @@ const TvValidation = ({ navigation, route }) => {
 
             const data = await axios.post(url, body, options)
 
-            const { message, response, responseCode, transactionStatus } = data.data
+            const { message, response } = data?.data
+            console.log(data.data, "from res")
 
             if (message === "Successful") {
                 setBouquet(response)
-                // console.log(response[0].availablePricingOptions)
+               
+            }else{
+                return null
             }
 
 
         } catch (error) {
-            console.log(error.response.data)
-            const { message } = error.response.data
+            const { message } = error?.response?.data
             setError(`${message}`)
         }
     }
@@ -240,14 +242,14 @@ const TvValidation = ({ navigation, route }) => {
                                 {bouquet && (
                                     <ScrollView style={{ height: "100%", marginBottom: "50%", padding: 10 }}>
                                         {loading === true ? <ActivityIndicator color="black" /> : null}
-                                        {bouquet.map((item, key) => {
+                                        {bouquet?.map((item, key) => {
                                             return (
                                                 <TouchableOpacity style={{ marginBottom: s(13) }} key={key} onPress={() => { setBouquetValue(item.name, item.code, item.availablePricingOptions[0].price, item.availablePricingOptions[0].monthsPaidFor ) }}>
                                                     <View style={{ flexDirection: "row", justifyContent: "space-between", padding: s(8) }}>
                                                         <View style={{ flexDirection: "row" }}>
-                                                            <Text style={{ marginRight: 5, color: "grey" }}>{item.name}</Text>
+                                                            <Text style={{ marginRight: 5, color: "grey" }}>{item?.name}</Text>
                                                             <Text style={{ color: "grey" }}>for</Text>
-                                                                <Text style={{ marginLeft: 5, color: "grey" }}>{`₦${item.availablePricingOptions[0].price}`}</Text>
+                                                                <Text style={{ marginLeft: 5, color: "grey" }}>{`₦${item?.availablePricingOptions[0].price}` || item.amount}</Text>
                                                         </View>
                                                         {/* <View>
                                                                 <Text>{item.validity}</Text>

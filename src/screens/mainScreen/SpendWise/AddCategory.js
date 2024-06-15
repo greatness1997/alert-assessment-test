@@ -225,7 +225,7 @@ const AddCategory = ({ navigation }) => {
                                                 onChangeText={handleChange('name')}
                                                 value={values.name}
                                                 placeholder="Example Tithe Offering"
-                                                style={{ height: s(50) }}
+                                                style={{ height: s(50), color: "black" }}
                                             />
                                             <Text style={{ color: "#FF0000", fontSize: s(10) }}>Required</Text>
                                         </View>
@@ -261,7 +261,7 @@ const AddCategory = ({ navigation }) => {
                                                     onChangeText={handleChange('beneficiary')}
                                                     value={values.beneficiary}
                                                     placeholder="Gospel Church"
-                                                    style={{ height: s(50) }}
+                                                    style={{ height: s(50), color: "black" }}
                                                 />
                                                 <Text style={{ color: "#FF0000", fontSize: s(10) }}>Required</Text>
                                             </View>
@@ -298,7 +298,7 @@ const AddCategory = ({ navigation }) => {
                                                     onChangeText={handleChange('accountNo')}
                                                     value={values.accountNo}
                                                     placeholder="0 1 2 3 4 5 6 7 8 9 0"
-                                                    style={{ height: s(50) }}
+                                                    style={{ height: s(50), color: "black" }}
                                                     maxLength={10}
                                                     keyboardType='numeric'
                                                 />
@@ -339,7 +339,7 @@ const AddCategory = ({ navigation }) => {
                                                     onChangeText={handleChange('occurs')}
                                                     value={values.occurs}
                                                     placeholder="01-January-2020"
-                                                    style={{ height: s(50) }}
+                                                    style={{ height: s(50), color: "black" }}
                                                 />
 
                                                 <MaterialCommunityIcons name="calendar" size={s(20)} color="#002B8E" style={{ marginRight: s(10) }} />
@@ -376,7 +376,7 @@ const AddCategory = ({ navigation }) => {
                                                     onChangeText={handleChange('amount')}
                                                     value={values.amount}
                                                     placeholder="100"
-                                                    style={{ height: s(50) }}
+                                                    style={{ height: s(50), color: "black" }}
                                                     keyboardType='numeric'
                                                 />
                                                 <Text style={{ color: "#FF0000", fontSize: s(10) }}>Required</Text>
@@ -413,7 +413,7 @@ const AddCategory = ({ navigation }) => {
                                                     onChangeText={handleChange('phoneNumber')}
                                                     value={values.phoneNumber}
                                                     placeholder="080 000 00000"
-                                                    style={{ height: s(50) }}
+                                                    style={{ height: s(50), color: "black" }}
                                                     keyboardType='numeric'
                                                 />
                                                 <Text style={{ color: "#FF0000", fontSize: s(10) }}>Required</Text>

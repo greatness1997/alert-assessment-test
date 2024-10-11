@@ -96,9 +96,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.junedomingo.travelapp"
+    namespace "com.cone.app"
     defaultConfig {
-        applicationId "com.junedomingo.travelapp"
+        applicationId "com.cone.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9

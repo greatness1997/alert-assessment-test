@@ -96,9 +96,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.cone.app"
+    namespace "com.application.spendr"
     defaultConfig {
-        applicationId "com.cone.app"
+        applicationId "com.application.spendr"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9

@@ -1,4 +1,4 @@
-package com.application.spendr;
+package com.alert.test;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

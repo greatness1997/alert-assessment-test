@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Spendr.app"
-               BlueprintName = "Spendr"
-               ReferencedContainer = "container:Spendr.xcodeproj">
+               BuildableName = "Alerttest.app"
+               BlueprintName = "Alerttest"
+               ReferencedContainer = "container:Alerttest.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "SpendrTests.xctest"
-               BlueprintName = "SpendrTests"
-               ReferencedContainer = "container:Spendr.xcodeproj">
+               BuildableName = "AlerttestTests.xctest"
+               BlueprintName = "AlerttestTests"
+               ReferencedContainer = "container:Alerttest.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Spendr.app"
-            BlueprintName = "Spendr"
-            ReferencedContainer = "container:Spendr.xcodeproj">
+            BuildableName = "Alerttest.app"
+            BlueprintName = "Alerttest"
+            ReferencedContainer = "container:Alerttest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Spendr.app"
-            BlueprintName = "Spendr"
-            ReferencedContainer = "container:Spendr.xcodeproj">
+            BuildableName = "Alerttest.app"
+            BlueprintName = "Alerttest"
+            ReferencedContainer = "container:Alerttest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

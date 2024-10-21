@@ -4,21 +4,17 @@ import Layout from '../../../components/Layout'
 import { scale, verticalScale, moderateScale } from '../../../assets/utils/respSizes'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
+import useLogic from './index.logic'
 
 import { colors } from '../../../assets/utils/colorTheme'
 
 
 const HomeScreen = ({ navigation }) => {
 
-    const currentDate = new Date();
-
-
-    const transactions = [
-        { id: '1', name: 'Convert Money', description: 'Swap between currencies', iconName: "dots-vertical", cateIcon: "cached" },
-        { id: '2', name: 'Tuition payment', description: 'Pay your tuition in school', iconName: "chevron-right", cateIcon: "school" },
-        { id: '3', name: 'Pay a merchant', description: 'Pay your suppliers globally', iconName: "chevron-right", cateIcon: "briefcase" },
-    ];
+    const {
+        homeBalance,
+        transactions
+    } = useLogic()
 
     const renderTransactionItem = ({ item }) => {
         return (
@@ -41,12 +37,6 @@ const HomeScreen = ({ navigation }) => {
     }
 
 
-    const formattedDate = currentDate.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-    });
-
     return (
         <Layout>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
@@ -64,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
             <View style={{ marginTop: moderateScale(30), backgroundColor: colors.background, padding: moderateScale(10), borderRadius: moderateScale(10) }}>
                 <Text style={{ fontSize: moderateScale(16), color: colors.text, fontWeight: "500", marginBottom: moderateScale(15) }}>USD Balance</Text>
                 <View style={{ flexDirection: "row" }}>
-                    <Text style={{ fontSize: moderateScale(35), color: colors.text, fontWeight: "bold" }}>$10,000.10</Text>
+                    <Text style={{ fontSize: moderateScale(35), color: colors.text, fontWeight: "bold" }}>${homeBalance}</Text>
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: moderateScale(30) }}>

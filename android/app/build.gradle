@@ -96,9 +96,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.application.spendr"
+    namespace "com.alert.test"
     defaultConfig {
-        applicationId "com.application.spendr"
+        applicationId "com.alert.test"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9

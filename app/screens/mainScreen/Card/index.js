@@ -1,16 +1,42 @@
-
-import { View, Text, Switch } from 'react-native'
+import { useState } from 'react'
+import { View, Text, Switch, TouchableOpacity } from 'react-native'
 import Layout from '../../../components/Layout'
 import { scale, verticalScale, moderateScale } from '../../../assets/utils/respSizes'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 
 
 import { colors } from '../../../assets/utils/colorTheme'
+import MyModal from './Modal'
+import useLogic from './index.logic'
 
 
 const CardScreen = ({ navigation }) => {
 
+    // const [modalVisible, setModalVisible] = useState(false);
+    // const { cardBalance } = useBalance()
+
+
+    // const handleTopUpPress = () => {
+    //     setModalVisible(true);
+    // };
+
+    // const handleCloseModal = () => {
+    //     setModalVisible(false);
+    // };
+
+    // const formattedCardBalance = cardBalance.toString();
+
+    // const displayCardBalance = formattedCardBalance.length > 1 && formattedCardBalance.startsWith('0')
+    //     ? formattedCardBalance.slice(1)
+    //     : formattedCardBalance;
+
+    const {
+        modalVisible,
+        setModalVisible,
+        handleTopUpPress,
+        handleCloseModal,
+        displayCardBalance
+    } = useLogic()
 
 
     return (
@@ -25,7 +51,7 @@ const CardScreen = ({ navigation }) => {
             </View>
 
             <View style={{ alignItems: "center" }}>
-                <Text style={{ fontSize: moderateScale(45), color: colors.text, fontWeight: "bold", marginTop: moderateScale(10) }}>$50</Text>
+                <Text style={{ fontSize: moderateScale(45), color: colors.text, fontWeight: "bold", marginTop: moderateScale(10) }}>${displayCardBalance}</Text>
                 <Text style={{ fontSize: moderateScale(16), color: colors.lighterGray, fontWeight: "500", marginTop: moderateScale(5) }}>Available to spend</Text>
             </View>
 
@@ -34,9 +60,9 @@ const CardScreen = ({ navigation }) => {
             </View>
 
             <View style={{ alignSelf: "center", flexDirection: "row", justifyContent: "space-between", marginTop: moderateScale(30), width: moderateScale(330) }}>
-                <View style={{ flex: 1, marginHorizontal: moderateScale(5), height: scale(46), backgroundColor: colors.darkerGray, borderRadius: moderateScale(50), justifyContent: "center", alignItems: "center", flexDirection: "row" }}>
+                <TouchableOpacity onPress={handleTopUpPress} style={{ flex: 1, marginHorizontal: moderateScale(5), height: scale(46), backgroundColor: colors.darkerGray, borderRadius: moderateScale(50), justifyContent: "center", alignItems: "center", flexDirection: "row" }}>
                     <Text style={{ fontSize: moderateScale(18), color: "white", fontWeight: "500", marginLeft: moderateScale(6) }}>Top Up</Text>
-                </View>
+                </TouchableOpacity>
 
                 <View style={{ flex: 1, marginHorizontal: moderateScale(5), width: verticalScale(100), height: scale(46), backgroundColor: colors.darkerGray, borderRadius: moderateScale(50), justifyContent: "center", alignItems: "center", flexDirection: "row" }}>
                     <Text style={{ fontSize: moderateScale(18), color: "white", fontWeight: "500", marginLeft: moderateScale(6) }}>Withdraw</Text>
@@ -72,6 +98,8 @@ const CardScreen = ({ navigation }) => {
                     </View>
                 </View>
             </View>
+
+            <MyModal visible={modalVisible} onClose={handleCloseModal} navigation={navigation} />
         </Layout>
     )
 }
